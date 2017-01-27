@@ -69,6 +69,10 @@ public class TurnAutonAction extends AutonAction {
 
     @Override
     public String renderCode() {
-        return String.format("turnWithPid(%d,127);", (int) angleDelta);
+        // ((sqrt((driveWidthHoles*0.5)^2 + (driveHeightHoles*0.5)^2)*pi)/((wheelSize)pi))*360
+
+        // Total drive ticks/point turn rotation: ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))*360
+        // Ticks/degree point turn rotation ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))
+        return String.format("pidDrivePoint(%d);", (int) (angleDelta * 5.12957113217f));
     }
 }

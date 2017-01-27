@@ -31,6 +31,14 @@ public class AutonPlanner {
         layout.setVgap(0);
         layout.setHgap(0);
 
+        JPanel contentPanel = new JPanel();
+        contentPanel.setPreferredSize(new Dimension(1393, 715));
+        contentPanel.setMinimumSize(contentPanel.getPreferredSize());
+        contentPanel.setLayout(new BorderLayout());
+        layout = (BorderLayout) contentPanel.getLayout();
+        layout.setVgap(0);
+        layout.setHgap(0);
+
         ActionManager manager = new ActionManager(frame);
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
@@ -207,16 +215,17 @@ public class AutonPlanner {
 
         sidePanel.add(moveOptionPanel, BorderLayout.NORTH);
 
-        JPanel contentPanel = new JPanel();
-        contentPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        sidePanel.add(contentPanel,BorderLayout.CENTER);
-        manager.setOptionsPanel(contentPanel);
+        JPanel actionSettingsPanel = new JPanel();
+        actionSettingsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        sidePanel.add(actionSettingsPanel,BorderLayout.CENTER);
+        manager.setOptionsPanel(actionSettingsPanel);
 
         // Add our content to the frame
         mainPanel.add(fieldPanel, BorderLayout.CENTER);
         mainPanel.add(actionList, BorderLayout.EAST);
-        frame.getContentPane().add(mainPanel, BorderLayout.CENTER);
-        frame.getContentPane().add(sidePanel, BorderLayout.EAST);
+        contentPanel.add(mainPanel, BorderLayout.CENTER);
+        contentPanel.add(sidePanel, BorderLayout.EAST);
+        frame.getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         // Display frame
         frame.pack();
