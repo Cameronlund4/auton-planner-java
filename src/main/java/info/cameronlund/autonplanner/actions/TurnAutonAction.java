@@ -73,6 +73,6 @@ public class TurnAutonAction extends AutonAction {
 
         // Total drive ticks/point turn rotation: ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))*360
         // Ticks/degree point turn rotation ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))
-        return String.format("pidDrivePoint(%d);", (int) (angleDelta * 5.12957113217f));
+        return String.format("pidDrivePoint(%d); // "+getWrapper().getActionName(), (int) (angleDelta * 3.75f));
     }
 }

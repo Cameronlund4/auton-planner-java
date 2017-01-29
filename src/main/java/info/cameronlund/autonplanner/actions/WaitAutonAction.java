@@ -77,6 +77,6 @@ public class WaitAutonAction extends AutonAction {
 
     @Override
     public String renderCode() {
-        return action;
+        return action + " // "+getWrapper().getActionName();
     }
 }

@@ -176,6 +176,18 @@ public class AutonActionWrapper {
                     manager.redrawContent();
                 }
                 break;
+            case LIFT:
+                if (!(action instanceof LiftAutonAction)) {
+                    action = new LiftAutonAction(this);
+                    manager.redrawContent();
+                }
+                break;
+            case CLAW:
+                if (!(action instanceof ClawAutonAction)) {
+                    action = new ClawAutonAction(this);
+                    manager.redrawContent();
+                }
+                break;
             default:
                 action = new DriveAutonAction(this);
         }

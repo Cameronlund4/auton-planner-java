@@ -45,3 +45,4 @@ fabric.properties
 
 ### Java template
 *.class
+/target/
