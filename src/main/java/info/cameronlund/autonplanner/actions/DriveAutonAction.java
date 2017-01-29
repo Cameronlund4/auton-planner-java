@@ -75,6 +75,6 @@ public class DriveAutonAction extends AutonAction {
 
     @Override
     public String renderCode() {
-        return String.format("driveWithPid(%d); // "+getWrapper().getActionName(),distance);
+        return String.format("pidDriveStraight(%d); // "+getWrapper().getActionName(),distance);
     }
 }

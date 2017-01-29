@@ -37,12 +37,12 @@ public class ClawAutonAction extends AutonAction {
         // Target set
         JLabel targetLabel = new JLabel("       \u2022 Target: ");
         gbc.gridx = 0;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         content.add(targetLabel, gbc);
 
-        JLabel speedLabel = new JLabel("       \u2022 Speed: ");
+        JLabel speedLabel = new JLabel("\u2022 Speed: ");
         gbc.gridx = 0;
-        gbc.gridy = 2;
+        gbc.gridy = 0;
         content.add(speedLabel, gbc);
 
         JLabel millisLabel = new JLabel("       \u2022 Millis: ");
@@ -67,7 +67,7 @@ public class ClawAutonAction extends AutonAction {
             }
         });
         gbc.gridx = 1;
-        gbc.gridy = 2;
+        gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         content.add(speedField, gbc);
 
@@ -88,7 +88,7 @@ public class ClawAutonAction extends AutonAction {
             }
         });
         gbc.gridx = 1;
-        gbc.gridy = 1;
+        gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
         content.add(targetField, gbc);
 
@@ -116,16 +116,14 @@ public class ClawAutonAction extends AutonAction {
 
         listener = e -> {
             action = e.getActionCommand();
-            switch(action) {
+            switch (action) {
                 case "action1":
                     millisField.setEnabled(false);
                     targetField.setEnabled(true);
-                    speedField.setEnabled(true);
                     break;
                 case "action2":
                     millisField.setEnabled(true);
                     targetField.setEnabled(false);
-                    speedField.setEnabled(false);
                     break;
             }
         };
@@ -135,7 +133,7 @@ public class ClawAutonAction extends AutonAction {
         JRadioButton pidButton = createRadioButton("Set claw", "action1");
         pidButton.setSelected(true);
         gbc.gridx = 0;
-        gbc.gridy = 0;
+        gbc.gridy = 1;
         content.add(pidButton, gbc);
         group.add(pidButton);
 
@@ -173,11 +171,11 @@ public class ClawAutonAction extends AutonAction {
 
     @Override
     public String renderCode() {
-        switch(action) {
+        switch (action) {
             case "action1":
                 return String.format("setClaw(%d,%d); // " + getWrapper().getActionName(), (int) angleTarget, speed);
             case "action2":
-                return String.format("closeClaw(%d); // " + getWrapper().getActionName(), millis);
+                return String.format("clawClose(%d,%d); // " + getWrapper().getActionName(), millis, speed);
             default:
                 return "// !----- Failed to generate claw code here -----!";
         }
