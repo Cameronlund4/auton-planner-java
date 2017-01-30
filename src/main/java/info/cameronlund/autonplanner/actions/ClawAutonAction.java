@@ -21,6 +21,13 @@ public class ClawAutonAction extends AutonAction {
     private String action = "action1";
     private ActionListener listener;
 
+    // GUI Objects
+    private JTextField millisField;
+    private JTextField speedField;
+    private JRadioButton setButton;
+    private JRadioButton closeButton;
+    private JTextField targetField;
+
     public ClawAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
 
@@ -51,7 +58,7 @@ public class ClawAutonAction extends AutonAction {
         gbc.gridy = 4;
         content.add(millisLabel, gbc);
 
-        JTextField speedField = new JTextField();
+        speedField = new JTextField();
         speedField.setText(speed + "");
         speedField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
@@ -72,7 +79,7 @@ public class ClawAutonAction extends AutonAction {
         gbc.fill = GridBagConstraints.BOTH;
         content.add(speedField, gbc);
 
-        JTextField targetField = new JTextField();
+        targetField = new JTextField();
         targetField.setText((int) angleTarget + "");
         targetField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
@@ -93,7 +100,7 @@ public class ClawAutonAction extends AutonAction {
         gbc.fill = GridBagConstraints.BOTH;
         content.add(targetField, gbc);
 
-        JTextField millisField = new JTextField();
+        millisField = new JTextField();
         millisField.setEnabled(false);
         millisField.setText(millis + "");
         millisField.setBorder(BorderFactory.createCompoundBorder(
@@ -131,19 +138,19 @@ public class ClawAutonAction extends AutonAction {
 
         // Target set
         gbc.insets = new Insets(5, 5, 5, 5);
-        JRadioButton pidButton = createRadioButton("Set claw", "action1");
-        pidButton.setSelected(true);
+        setButton = createRadioButton("Set claw", "action1");
+        setButton.setSelected(true);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        content.add(pidButton, gbc);
-        group.add(pidButton);
+        content.add(setButton, gbc);
+        group.add(setButton);
 
         // Close set
-        JRadioButton liftButton = createRadioButton("Close claw", "action2");
+        closeButton = createRadioButton("Close claw", "action2");
         gbc.gridx = 0;
         gbc.gridy = 3;
-        content.add(liftButton, gbc);
-        group.add(liftButton);
+        content.add(closeButton, gbc);
+        group.add(closeButton);
 
         setContent(content);
     }
@@ -184,7 +191,26 @@ public class ClawAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        // TODO Implement
+        if (!object.get("type").getAsString().equalsIgnoreCase("CLAW")) {
+            System.out.println("Got bad type for " + "CLAW" + ", received " +
+                    object.get("type").getAsString());
+            return;
+        }
+        millis = object.get("millis").getAsInt();
+        millisField.setText(millis + "");
+        action = object.get("action").getAsString();
+        switch (action) {
+            case "action1":
+                setButton.setSelected(true);
+                break;
+            case "action2":
+                closeButton.setSelected(true);
+                break;
+        }
+        speed = object.get("speed").getAsInt();
+        speedField.setText(speed + "");
+        angleTarget = object.get("angleTarget").getAsInt();
+        targetField.setText((int) angleTarget + "");
     }
 
     @Override
@@ -192,7 +218,7 @@ public class ClawAutonAction extends AutonAction {
         JsonObject object = new JsonObject();
         object.addProperty("type", "CLAW");
         object.addProperty("name", getWrapper().getActionName());
-        object.addProperty("angleTarget", angleTarget);
+        object.addProperty("angleTarget", (int) angleTarget);
         object.addProperty("speed", speed);
         object.addProperty("millis", millis);
         object.addProperty("action", action);

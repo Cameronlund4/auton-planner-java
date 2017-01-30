@@ -15,6 +15,7 @@ import java.awt.*;
  */
 public class DriveAutonAction extends AutonAction {
     private int distance = 0;
+    JTextField distField;
 
     public DriveAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
@@ -31,7 +32,7 @@ public class DriveAutonAction extends AutonAction {
         gbc.gridy = 0;
         content.add(label, gbc);
 
-        JTextField distField = new JTextField();
+        distField = new JTextField();
         distField.setText(distance + "");
         distField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
@@ -81,7 +82,13 @@ public class DriveAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        // TODO Implement
+        if (!object.get("type").getAsString().equalsIgnoreCase("DRIVE")) {
+            System.out.println("Got bad type for " + "DRIVE" + ", received " +
+                    object.get("type").getAsString());
+            return;
+        }
+        distance = object.get("distance").getAsInt();
+        distField.setText(distance+"");
     }
 
     @Override

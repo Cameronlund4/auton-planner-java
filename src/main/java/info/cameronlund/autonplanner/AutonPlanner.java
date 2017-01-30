@@ -1,6 +1,7 @@
 package info.cameronlund.autonplanner;
 
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import info.cameronlund.autonplanner.actions.ActionManager;
 import info.cameronlund.autonplanner.actions.ActionType;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
@@ -21,6 +22,7 @@ public class AutonPlanner {
     private int actionId = 0;
     private String autonName = "Unnamed Auton";
     private ActionManager manager;
+    private FieldPanel fieldPanel;
 
     public AutonPlanner() {
         // Main frame for the project
@@ -45,7 +47,7 @@ public class AutonPlanner {
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
         // Load the field image, scaled 3 pixels -> 1 tick
-        FieldPanel fieldPanel = new FieldPanel("scale_field(2-1).png",
+        fieldPanel = new FieldPanel("scale_field(2-1).png",
                 "cube.png", "star.png");
         fieldPanel.setManager(manager);
 
@@ -237,6 +239,8 @@ public class AutonPlanner {
         frame.pack();
         frame.setVisible(true);
 
+        loadJson(new JsonParser().parse("{\"autonName\":\"Tester auton\",\"startRot\":150,\"startX\":520,\"startY\":625,\"actions\":[{\"type\":\"DRIVE\",\"name\":\"Drive past cube\",\"distance\":-1150},{\"type\":\"DRIVE\",\"name\":\"Unnamed action 2\",\"distance\":0},{\"type\":\"CLAW\",\"name\":\"Deploy claw\",\"angleTarget\":0,\"speed\":127,\"millis\":500,\"action\":\"action2\"},{\"type\":\"DRIVE\",\"name\":\"Unnamed action 4\",\"distance\":0}]}").getAsJsonObject());
+
         new Thread(() -> {
             while (true) {
                 System.out.println(toJson().toString());
@@ -285,9 +289,19 @@ public class AutonPlanner {
             l.actionPerformed(new ActionEvent(this, actionId, "mode_switched"));
     }
 
+    public void loadJson(JsonObject object) {
+        autonName = object.get("autonName").getAsString();
+        manager.loadJson(object.get("actions").getAsJsonArray());
+        startingRotation = object.get("startRot").getAsInt();
+        fieldPanel.getRobot().setRestingReturn(object.get("startX").getAsInt(), object.get("startY").getAsInt());
+    }
+
     public JsonObject toJson() {
         JsonObject file = new JsonObject();
         file.addProperty("autonName", autonName);
+        file.addProperty("startRot", startingRotation);
+        file.addProperty("startX", fieldPanel.getRobot().getRestingX());
+        file.addProperty("startY", fieldPanel.getRobot().getRestingY());
         file.add("actions", manager.toJson());
         System.out.println(file.toString());
         return file;

@@ -10,6 +10,7 @@ import java.awt.*;
 
 public class TurnAutonAction extends AutonAction {
     private float angleDelta = 0;
+    private JTextField angleField;
 
     public TurnAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
@@ -27,7 +28,7 @@ public class TurnAutonAction extends AutonAction {
         gbc.gridy = 0;
         content.add(label, gbc);
 
-        JTextField angleField = new JTextField();
+        angleField = new JTextField();
         angleField.setText((int) angleDelta + "");
         angleField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
@@ -79,7 +80,13 @@ public class TurnAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        // TODO Implement
+        if (!object.get("type").getAsString().equalsIgnoreCase("TURN")) {
+            System.out.println("Got bad type for " + "TURN" + ", received " +
+                    object.get("type").getAsString());
+            return;
+        }
+        angleDelta = object.get("distance").getAsInt();
+        angleField.setText((int) angleDelta+"");
     }
 
     @Override

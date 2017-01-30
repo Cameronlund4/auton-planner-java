@@ -10,7 +10,12 @@ import java.awt.event.ActionListener;
 public class WaitAutonAction extends AutonAction {
     private String action = "waitForPID();";
     private ActionListener listener;
-    private int time;
+    private int millis;
+    private JRadioButton pidButton;
+    private JRadioButton liftButton;
+    private JRadioButton clawButton;
+    private JRadioButton delayButton;
+    private JTextField millisField;
 
     public WaitAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
@@ -24,8 +29,8 @@ public class WaitAutonAction extends AutonAction {
         //gbc.weightx = 1;
         //gbc.fill = GridBagConstraints.NONE;
 
-        JTextField millisField = new JTextField();
-        millisField.setText(time + "");
+        millisField = new JTextField();
+        millisField.setText(millis + "");
         millisField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -33,11 +38,11 @@ public class WaitAutonAction extends AutonAction {
         millisField.setMaximumSize(new Dimension(75, 25));
         millisField.addActionListener(e -> {
             try {
-                time = Integer.parseInt(millisField.getText());
+                millis = Integer.parseInt(millisField.getText());
                 wrapper.getManager().getFrame().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
-                millisField.setText(time + "");
+                millisField.setText(millis + "");
             }
         });
         millisField.setEnabled(false);
@@ -59,26 +64,26 @@ public class WaitAutonAction extends AutonAction {
         ButtonGroup group = new ButtonGroup();
 
         gbc.insets = new Insets(5, 15, 5, 5);
-        JRadioButton pidButton = createRadioButton("PID Loop", "waitForPID();");
+        pidButton = createRadioButton("PID Loop", "waitForPID();");
         pidButton.setSelected(true);
         gbc.gridx = 0;
         gbc.gridy = 1;
         content.add(pidButton, gbc);
         group.add(pidButton);
 
-        JRadioButton liftButton = createRadioButton("Lift movement", "waitForLift();");
+        liftButton = createRadioButton("Lift movement", "waitForLift();");
         gbc.gridx = 0;
         gbc.gridy = 2;
         content.add(liftButton, gbc);
         group.add(liftButton);
 
-        JRadioButton clawButton = createRadioButton("Claw movement", "waitForClaw();");
+        clawButton = createRadioButton("Claw movement", "waitForClaw();");
         gbc.gridx = 0;
         gbc.gridy = 3;
         content.add(clawButton, gbc);
         group.add(clawButton);
 
-        JRadioButton delayButton = createRadioButton("Millis wait", "delay");
+        delayButton = createRadioButton("Millis wait", "delay");
         gbc.gridx = 0;
         gbc.gridy = 4;
         content.add(delayButton, gbc);
@@ -111,13 +116,35 @@ public class WaitAutonAction extends AutonAction {
 
     @Override
     public String renderCode() {
-        return (!action.equals("delay") ? action : String.format("wait1MSec(%d);", time))
+        return (!action.equals("delay") ? action : String.format("wait1MSec(%d);", millis))
                 + " // " + getWrapper().getActionName();
     }
 
     @Override
     public void loadJson(JsonObject object) {
-        // TODO Implement
+        if (!object.get("type").getAsString().equalsIgnoreCase("WAIT")) {
+            System.out.println("Got bad type for " + "WAIT" + ", received " +
+                    object.get("type").getAsString());
+            return;
+        }
+        millis = object.get("millis").getAsInt();
+        millisField.setText(millis+"");
+        action = object.get("action").getAsString();
+        millisField.setEnabled("delay".equals(action));
+        switch (action) {
+            case "waitForPID();":
+                pidButton.setSelected(true);
+                break;
+            case "waitForLift();":
+                liftButton.setSelected(true);
+                break;
+            case "waitForClaw();":
+                clawButton.setSelected(true);
+                break;
+            case "delay":
+                delayButton.setSelected(true);
+                break;
+        }
     }
 
     @Override
@@ -125,7 +152,7 @@ public class WaitAutonAction extends AutonAction {
         JsonObject object = new JsonObject();
         object.addProperty("type", "WAIT");
         object.addProperty("name", getWrapper().getActionName());
-        object.addProperty("time", time);
+        object.addProperty("millis", millis);
         object.addProperty("action", action);
         return object;
     }

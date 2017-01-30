@@ -16,6 +16,8 @@ import java.awt.*;
 public class LiftAutonAction extends AutonAction {
     private int speed;
     private float angleTarget;
+    private JTextField speedField;
+    private JTextField angleField;
 
     public LiftAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
@@ -33,7 +35,7 @@ public class LiftAutonAction extends AutonAction {
         gbc.gridy = 0;
         content.add(label1, gbc);
 
-        JTextField angleField = new JTextField();
+        angleField = new JTextField();
         angleField.setText((int) angleTarget + "");
         angleField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
@@ -61,7 +63,7 @@ public class LiftAutonAction extends AutonAction {
         gbc.gridy = 1;
         content.add(label2, gbc);
 
-        JTextField speedField = new JTextField();
+        speedField = new JTextField();
         speedField.setText(speed + "");
         speedField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
@@ -106,7 +108,15 @@ public class LiftAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        // TODO Implement
+        if (!object.get("type").getAsString().equalsIgnoreCase("LIFT")) {
+            System.out.println("Got bad type for " + "LIFT" + ", received " +
+                    object.get("type").getAsString());
+            return;
+        }
+        angleTarget = object.get("distance").getAsInt();
+        angleField.setText((int) angleTarget+"");
+        speed = object.get("speed").getAsInt();
+        speedField.setText(speed+"");
     }
 
     @Override

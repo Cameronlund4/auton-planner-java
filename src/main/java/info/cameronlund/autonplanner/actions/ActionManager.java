@@ -1,6 +1,8 @@
 package info.cameronlund.autonplanner.actions;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import info.cameronlund.autonplanner.listeners.TitleMouseListener;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
 import info.cameronlund.autonplanner.robot.Robot;
@@ -133,6 +135,8 @@ public class ActionManager {
     }
 
     public void addBeforeSelected(AutonActionWrapper action) {
+        if (selected == null)
+            return;
         int index = 0;
         Component[] components = panel.getMainList().getComponents();
         for (; index < components.length; index++) {
@@ -250,7 +254,40 @@ public class ActionManager {
         return actionsArray;
     }
 
-    public void loadJson() {
-        // TODO Implement
+    public void loadJson(JsonArray array) {
+        clear();
+        for (JsonElement elem : array) {
+            // Generate a wrapper for the new action
+            JsonObject object = elem.getAsJsonObject();
+            System.out.println("--------------------");
+            System.out.println(object);
+            AutonActionWrapper wrapper = createNewAction();
+            wrapper.setActionName(object.get("name").getAsString());
+            System.out.println(object.get("type").getAsString());
+            // Set the type of the action
+            switch (object.get("type").getAsString()) {
+                case "CLAW":
+                    wrapper.setType(ActionType.CLAW);
+                    break;
+                case "DRIVE":
+                    wrapper.setType(ActionType.DRIVE);
+                    break;
+                case "LIFT":
+                    wrapper.setType(ActionType.LIFT);
+                    break;
+                case "TURN":
+                    wrapper.setType(ActionType.TURN);
+                    break;
+                case "WAIT":
+                    wrapper.setType(ActionType.WAIT);
+                    break;
+            }
+            // Load the data for the action
+            wrapper.getAction().loadJson(object);
+            // Load the action
+            add(wrapper);
+            System.out.println("--------------------");
+        }
+        setSelected(null);
     }
 }
