@@ -1,5 +1,7 @@
 package info.cameronlund.autonplanner.actions;
 
+import com.google.gson.JsonObject;
+
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
@@ -111,5 +113,20 @@ public class WaitAutonAction extends AutonAction {
     public String renderCode() {
         return (!action.equals("delay") ? action : String.format("wait1MSec(%d);", time))
                 + " // " + getWrapper().getActionName();
+    }
+
+    @Override
+    public void loadJson(JsonObject object) {
+        // TODO Implement
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject object = new JsonObject();
+        object.addProperty("type","WAIT");
+        object.addProperty("name",getWrapper().getActionName());
+        object.addProperty("time",time);
+        object.addProperty("action",action);
+        return object;
     }
 }

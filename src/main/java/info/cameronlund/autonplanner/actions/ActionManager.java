@@ -1,5 +1,6 @@
 package info.cameronlund.autonplanner.actions;
 
+import com.google.gson.JsonArray;
 import info.cameronlund.autonplanner.listeners.TitleMouseListener;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
 import info.cameronlund.autonplanner.robot.Robot;
@@ -20,6 +21,7 @@ public class ActionManager {
     private JComboBox<String> actionTypeBox;
     private JFrame frame;
     private JPanel optionsPanel;
+    private String autonName = "unset_name";
 
     public ActionManager(JFrame frame) {
         this.frame = frame;
@@ -153,7 +155,7 @@ public class ActionManager {
     }
 
     public void add(AutonActionWrapper action) {
-        add(action, -1,actions.size());
+        add(action, -1, actions.size());
     }
 
     public void remove(AutonActionWrapper action) {
@@ -236,5 +238,20 @@ public class ActionManager {
 
     public JFrame getFrame() {
         return frame;
+    }
+
+    public void setAutonName(String autonName) {
+        this.autonName = autonName;
+    }
+
+    public JsonArray toJson() {
+        JsonArray actionsArray = new JsonArray();
+        for (AutonActionWrapper action : actions)
+            actionsArray.add(action.getAction().toJson());
+        return actionsArray;
+    }
+
+    public void loadJson() {
+        // TODO Implement
     }
 }

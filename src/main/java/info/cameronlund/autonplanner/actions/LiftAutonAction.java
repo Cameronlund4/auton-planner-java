@@ -1,5 +1,6 @@
 package info.cameronlund.autonplanner.actions;
 
+import com.google.gson.JsonObject;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -101,5 +102,20 @@ public class LiftAutonAction extends AutonAction {
     @Override
     public String renderCode() {
         return String.format("setLift(%d,%d); // "+getWrapper().getActionName(),(int) angleTarget, speed);
+    }
+
+    @Override
+    public void loadJson(JsonObject object) {
+        // TODO Implement
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject object = new JsonObject();
+        object.addProperty("type","LIFT");
+        object.addProperty("name",getWrapper().getActionName());
+        object.addProperty("speed",speed);
+        object.addProperty("angleTarget",angleTarget);
+        return object;
     }
 }

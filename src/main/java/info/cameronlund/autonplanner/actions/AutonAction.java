@@ -1,5 +1,6 @@
 package info.cameronlund.autonplanner.actions;
 
+import com.google.gson.JsonObject;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -18,6 +19,11 @@ public abstract class AutonAction {
 
     public AutonAction(AutonActionWrapper wrapper) {
         this.wrapper = wrapper;
+    }
+
+    public AutonAction(AutonActionWrapper wrapper, JsonObject data) {
+        this(wrapper);
+        loadJson(data);
     }
 
     public AutonActionWrapper getWrapper() {
@@ -45,4 +51,8 @@ public abstract class AutonAction {
     }
 
     public abstract String renderCode();
+
+    public abstract void loadJson(JsonObject object);
+
+    public abstract JsonObject toJson();
 }

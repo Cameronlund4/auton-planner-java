@@ -1,5 +1,6 @@
 package info.cameronlund.autonplanner;
 
+import com.google.gson.JsonObject;
 import info.cameronlund.autonplanner.actions.ActionManager;
 import info.cameronlund.autonplanner.actions.ActionType;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
@@ -19,6 +20,7 @@ public class AutonPlanner {
     private static int startingRotation = 0;
     private int actionId = 0;
     private String autonName = "Unnamed Auton";
+    private ActionManager manager;
 
     public AutonPlanner() {
         // Main frame for the project
@@ -39,7 +41,7 @@ public class AutonPlanner {
         layout.setVgap(0);
         layout.setHgap(0);
 
-        ActionManager manager = new ActionManager(frame);
+        manager = new ActionManager(frame);
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
         // Load the field image, scaled 3 pixels -> 1 tick
@@ -142,7 +144,7 @@ public class AutonPlanner {
                 frame.repaint();
             } catch (Exception ignored) {
                 offsetField.setText((fieldPanel.getRobot().getRestingX() - 515) + "," +
-                        -1*(fieldPanel.getRobot().getRestingY() - 630));
+                        -1 * (fieldPanel.getRobot().getRestingY() - 630));
             }
         });
         offsetField.setText((fieldPanel.getRobot().getRestingX() - 515) + "," +
@@ -159,7 +161,11 @@ public class AutonPlanner {
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
         autonNameField.setPreferredSize(new Dimension(150, 30));
         autonNameField.setMaximumSize(new Dimension(150, 30));
-        autonNameField.addActionListener(e -> autonName = autonNameField.getText());
+        autonNameField.addActionListener(e -> {
+            autonName = autonNameField.getText();
+            manager.setAutonName(autonName);
+        });
+        manager.setAutonName(autonName);
         autonNameField.setText(autonName);
 
         gbc.fill = GridBagConstraints.VERTICAL;
@@ -217,7 +223,7 @@ public class AutonPlanner {
 
         JPanel actionSettingsPanel = new JPanel();
         actionSettingsPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        sidePanel.add(actionSettingsPanel,BorderLayout.CENTER);
+        sidePanel.add(actionSettingsPanel, BorderLayout.CENTER);
         manager.setOptionsPanel(actionSettingsPanel);
 
         // Add our content to the frame
@@ -230,6 +236,18 @@ public class AutonPlanner {
         // Display frame
         frame.pack();
         frame.setVisible(true);
+
+        new Thread(() -> {
+            while (true) {
+                System.out.println(toJson().toString());
+                try {
+                    Thread.sleep(10000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                    return;
+                }
+            }
+        }).start();
     }
 
     public static boolean isPreloadLoaded() {
@@ -265,5 +283,13 @@ public class AutonPlanner {
 
     public static boolean isSkill() {
         return isSkill;
+    }
+
+    public JsonObject toJson() {
+        JsonObject file = new JsonObject();
+        file.addProperty("autonName",autonName);
+        file.add("actions",manager.toJson());
+        System.out.println(file.toString());
+        return file;
     }
 }

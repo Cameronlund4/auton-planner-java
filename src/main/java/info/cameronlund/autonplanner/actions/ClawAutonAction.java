@@ -1,5 +1,6 @@
 package info.cameronlund.autonplanner.actions;
 
+import com.google.gson.JsonObject;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -179,5 +180,22 @@ public class ClawAutonAction extends AutonAction {
             default:
                 return "// !----- Failed to generate claw code here -----!";
         }
+    }
+
+    @Override
+    public void loadJson(JsonObject object) {
+        // TODO Implement
+    }
+
+    @Override
+    public JsonObject toJson() {
+        JsonObject object = new JsonObject();
+        object.addProperty("type","CLAW");
+        object.addProperty("name",getWrapper().getActionName());
+        object.addProperty("angleTarget",angleTarget);
+        object.addProperty("speed",speed);
+        object.addProperty("millis",millis);
+        object.addProperty("action",action);
+        return object;
     }
 }
