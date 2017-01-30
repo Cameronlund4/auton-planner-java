@@ -64,7 +64,8 @@ public class Robot {
 
     public void moveTicks(int ticks) {
         // Pixels = (ticks/12)*2, it's ticks/12 cause I did the math for pixels in inches, not feet (Whoops)
-        movePixels((int) ((double) ticks / 12) * 2);
+        // movePixels((int) ((double) ticks / 12) * 2); // This is direct drive. Below is geared 1:2
+        movePixels((int) ((double) ticks / 12));
     }
 
     public void paint(Graphics g) {
