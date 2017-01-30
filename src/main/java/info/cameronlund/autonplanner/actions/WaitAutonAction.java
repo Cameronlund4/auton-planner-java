@@ -123,10 +123,10 @@ public class WaitAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type","WAIT");
-        object.addProperty("name",getWrapper().getActionName());
-        object.addProperty("time",time);
-        object.addProperty("action",action);
+        object.addProperty("type", "WAIT");
+        object.addProperty("name", getWrapper().getActionName());
+        object.addProperty("time", time);
+        object.addProperty("action", action);
         return object;
     }
 }

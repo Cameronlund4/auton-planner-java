@@ -74,7 +74,7 @@ public class TurnAutonAction extends AutonAction {
 
         // Total drive ticks/point turn rotation: ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))*360
         // Ticks/degree point turn rotation ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))
-        return String.format("pidDrivePoint(%d); // "+getWrapper().getActionName(), (int) (angleDelta * 3.75f));
+        return String.format("pidDrivePoint(%d); // " + getWrapper().getActionName(), (int) (angleDelta * 3.75f));
     }
 
     @Override
@@ -85,9 +85,9 @@ public class TurnAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type","TURN");
-        object.addProperty("name",getWrapper().getActionName());
-        object.addProperty("angleDelta",angleDelta);
+        object.addProperty("type", "TURN");
+        object.addProperty("name", getWrapper().getActionName());
+        object.addProperty("angleDelta", angleDelta);
         return object;
     }
 }

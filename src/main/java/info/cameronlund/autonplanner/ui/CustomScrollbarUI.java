@@ -20,7 +20,7 @@ public class CustomScrollbarUI extends BasicScrollBarUI {
     @Override
     protected void paintTrack(Graphics g, JComponent c, Rectangle r) {
         g.setColor(Color.lightGray);
-        g.fillRect((int) r.getX(), (int) r.getY(),(int) r.getWidth(),(int) r.getHeight());
+        g.fillRect((int) r.getX(), (int) r.getY(), (int) r.getWidth(), (int) r.getHeight());
     }
 
     @Override

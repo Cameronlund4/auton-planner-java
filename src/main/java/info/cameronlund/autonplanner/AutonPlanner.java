@@ -14,10 +14,10 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 public class AutonPlanner {
-    private ArrayList<ActionListener> modeSwitchListeners = new ArrayList<>();
     private static boolean isSkill = false;
     private static boolean preloadLoaded = false;
     private static int startingRotation = 0;
+    private ArrayList<ActionListener> modeSwitchListeners = new ArrayList<>();
     private int actionId = 0;
     private String autonName = "Unnamed Auton";
     private ActionManager manager;
@@ -266,6 +266,10 @@ public class AutonPlanner {
         AutonPlanner.startingRotation = startingRotation;
     }
 
+    public static boolean isSkill() {
+        return isSkill;
+    }
+
     public void addModeListener(ActionListener listener) {
         modeSwitchListeners.add(listener);
     }
@@ -281,14 +285,10 @@ public class AutonPlanner {
             l.actionPerformed(new ActionEvent(this, actionId, "mode_switched"));
     }
 
-    public static boolean isSkill() {
-        return isSkill;
-    }
-
     public JsonObject toJson() {
         JsonObject file = new JsonObject();
-        file.addProperty("autonName",autonName);
-        file.add("actions",manager.toJson());
+        file.addProperty("autonName", autonName);
+        file.add("actions", manager.toJson());
         System.out.println(file.toString());
         return file;
     }

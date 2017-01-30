@@ -14,7 +14,7 @@ public abstract class GameObject {
     public GameObject(String type, int typeId) {
         this.typeId = typeId;
         this.type = type;
-        this.globalId = type+"_"+typeId;
+        this.globalId = type + "_" + typeId;
     }
 
     public String toString() {
@@ -39,7 +39,7 @@ public abstract class GameObject {
     }
 
     public void setRestingReturn(int restingX, int restingY) {
-        setResting(restingX,restingY);
+        setResting(restingX, restingY);
         returnToResting();
     }
 

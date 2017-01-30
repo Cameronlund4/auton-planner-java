@@ -30,12 +30,12 @@ public abstract class AutonAction {
         return wrapper;
     }
 
-    protected void setContent(JPanel content) {
-        this.content = content;
-    }
-
     public JPanel getContent() {
         return content;
+    }
+
+    protected void setContent(JPanel content) {
+        this.content = content;
     }
 
     public abstract Robot renderWithGraphics(Robot robot, Graphics g);

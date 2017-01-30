@@ -86,7 +86,7 @@ public class ActionListPanel extends JPanel {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainList.add(comp,gbc,index);
+        mainList.add(comp, gbc, index);
         revalidate();
         repaint();
     }
@@ -96,14 +96,14 @@ public class ActionListPanel extends JPanel {
         gbc.gridwidth = GridBagConstraints.REMAINDER;
         gbc.weightx = 1;
         gbc.fill = GridBagConstraints.HORIZONTAL;
-        mainList.add(comp,gbc,listPosition++);
+        mainList.add(comp, gbc, listPosition++);
         revalidate();
         repaint();
     }
 
     public void removeMove(Component comp) {
         mainList.remove(comp);
-        listPosition-=1;
+        listPosition -= 1;
         revalidate();
         repaint();
     }

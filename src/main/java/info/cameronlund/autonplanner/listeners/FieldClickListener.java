@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 public abstract class FieldClickListener implements MouseListener {
-    private int x,y;
+    private int x, y;
 
     public FieldClickListener(FieldPanel fieldPanel) {
         x = fieldPanel.getX();
@@ -16,9 +16,9 @@ public abstract class FieldClickListener implements MouseListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        if (e.getX()-x > 687|| e.getY()-y > 687)
+        if (e.getX() - x > 687 || e.getY() - y > 687)
             return;
-        fieldClicked(e.getX()-x,e.getY()-y);
+        fieldClicked(e.getX() - x, e.getY() - y);
     }
 
     @Override

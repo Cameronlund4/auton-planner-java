@@ -5,6 +5,7 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 
 public class AutonActionWrapper {
+    private static int nextId = 0;
     private GridBagConstraints gc = new GridBagConstraints();
     private Insets insets = new Insets(0, 5, 0, 0);
     private Color defaultBg;
@@ -15,7 +16,6 @@ public class AutonActionWrapper {
     private String actionName;
     private boolean selected = false;
     private ActionType type = ActionType.DRIVE;
-    private static int nextId = 0;
     private int id;
     private AutonAction action;
 
@@ -109,13 +109,13 @@ public class AutonActionWrapper {
         gc.insets = insets;
     }
 
+    public String getActionName() {
+        return actionName;
+    }
+
     public void setActionName(String actionName) {
         this.actionName = actionName;
         titleLabel.setText(actionName);
-    }
-
-    public String getActionName() {
-        return actionName;
     }
 
     public JPanel getTitleGraphic() {

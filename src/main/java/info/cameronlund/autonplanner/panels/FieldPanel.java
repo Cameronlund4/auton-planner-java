@@ -15,9 +15,11 @@ import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 
 public class FieldPanel extends JPanel {
@@ -138,8 +140,8 @@ public class FieldPanel extends JPanel {
     }
 
     public class Test {
-        private Point pos1;
         private final Random r = new Random();
+        private Point pos1;
 
         public Test(FieldPanel panel) {
             new FieldClickListener(panel) {

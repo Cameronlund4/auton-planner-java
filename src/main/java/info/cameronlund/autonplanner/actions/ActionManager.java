@@ -22,6 +22,7 @@ public class ActionManager {
     private JFrame frame;
     private JPanel optionsPanel;
     private String autonName = "unset_name";
+    private int i = 0;
 
     public ActionManager(JFrame frame) {
         this.frame = frame;
@@ -87,8 +88,6 @@ public class ActionManager {
             setSelected(action);
         });
     }
-
-    private int i = 0;
 
     public AutonActionWrapper createNewAction() {
         AutonActionWrapper action = new AutonActionWrapper(this, "Unnamed action " + i++);

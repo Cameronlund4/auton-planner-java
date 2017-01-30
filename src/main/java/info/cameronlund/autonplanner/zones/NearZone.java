@@ -42,9 +42,9 @@ public class NearZone extends ScoringZone {
         // Draw pretty ] shape
         Graphics2D g2 = (Graphics2D) g;
         ((Graphics2D) g).setStroke(new BasicStroke(2));
-        g2.drawLine(420, (startingY - (Cube.getCubeImageHeight() / 2))-25, 425,
-                (startingY - (Cube.getCubeImageHeight() / 2))-25);
-        g2.drawLine(425, (startingY - (Cube.getCubeImageHeight() / 2))-25, 425,
+        g2.drawLine(420, (startingY - (Cube.getCubeImageHeight() / 2)) - 25, 425,
+                (startingY - (Cube.getCubeImageHeight() / 2)) - 25);
+        g2.drawLine(425, (startingY - (Cube.getCubeImageHeight() / 2)) - 25, 425,
                 (startingY + (Cube.getCubeImageHeight() / 2)) + 25);
         g2.drawLine(420, (startingY + (Cube.getCubeImageHeight() / 2)) + 25, 425,
                 (startingY + (Cube.getCubeImageHeight() / 2)) + 25);

@@ -190,12 +190,12 @@ public class ClawAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type","CLAW");
-        object.addProperty("name",getWrapper().getActionName());
-        object.addProperty("angleTarget",angleTarget);
-        object.addProperty("speed",speed);
-        object.addProperty("millis",millis);
-        object.addProperty("action",action);
+        object.addProperty("type", "CLAW");
+        object.addProperty("name", getWrapper().getActionName());
+        object.addProperty("angleTarget", angleTarget);
+        object.addProperty("speed", speed);
+        object.addProperty("millis", millis);
+        object.addProperty("action", action);
         return object;
     }
 }
