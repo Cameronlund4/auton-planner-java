@@ -9,9 +9,7 @@ import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
-import java.awt.event.KeyEvent;
+import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -194,8 +192,11 @@ public class ActionManager {
 
             @Override
             public void focusLost(FocusEvent e) {
-                if (selected != null)
-                    selected.setActionName(actionNameField.getText());
+                if (selected != null) {
+                    ActionEvent event = new ActionEvent(this, 0, "action");
+                    for (ActionListener list : actionNameField.getActionListeners())
+                        list.actionPerformed(event);
+                }
             }
         });
         actionNameField.addActionListener((e) -> {

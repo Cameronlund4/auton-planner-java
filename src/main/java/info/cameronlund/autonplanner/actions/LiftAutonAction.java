@@ -1,6 +1,7 @@
 package info.cameronlund.autonplanner.actions;
 
 import com.google.gson.JsonObject;
+import info.cameronlund.autonplanner.listeners.ActionFocusListener;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -51,6 +52,8 @@ public class LiftAutonAction extends AutonAction {
                 angleField.setText((int) angleTarget + "");
             }
         });
+        angleField.addFocusListener(new ActionFocusListener(angleField));
+        getSaveStateListener().addComponent(angleField);
 
         gbc.gridx = 1;
         gbc.gridy = 0;
@@ -79,6 +82,8 @@ public class LiftAutonAction extends AutonAction {
                 speedField.setText(speed + "");
             }
         });
+        speedField.addFocusListener(new ActionFocusListener(speedField));
+        getSaveStateListener().addComponent(speedField);
 
         gbc.gridx = 1;
         gbc.gridy = 1;

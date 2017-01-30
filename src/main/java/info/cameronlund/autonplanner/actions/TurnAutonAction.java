@@ -2,6 +2,7 @@ package info.cameronlund.autonplanner.actions;
 
 
 import com.google.gson.JsonObject;
+import info.cameronlund.autonplanner.listeners.ActionFocusListener;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -44,6 +45,8 @@ public class TurnAutonAction extends AutonAction {
                 angleField.setText((int) angleDelta + "");
             }
         });
+        angleField.addFocusListener(new ActionFocusListener(angleField));
+        getSaveStateListener().addComponent(angleField);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;

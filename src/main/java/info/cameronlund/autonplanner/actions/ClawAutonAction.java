@@ -1,6 +1,7 @@
 package info.cameronlund.autonplanner.actions;
 
 import com.google.gson.JsonObject;
+import info.cameronlund.autonplanner.listeners.ActionFocusListener;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -74,6 +75,8 @@ public class ClawAutonAction extends AutonAction {
                 speedField.setText(speed + "");
             }
         });
+        speedField.addFocusListener(new ActionFocusListener(speedField));
+        getSaveStateListener().addComponent(speedField);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -95,6 +98,8 @@ public class ClawAutonAction extends AutonAction {
                 targetField.setText((int) angleTarget + "");
             }
         });
+        targetField.addFocusListener(new ActionFocusListener(targetField));
+        getSaveStateListener().addComponent(targetField);
         gbc.gridx = 1;
         gbc.gridy = 2;
         gbc.fill = GridBagConstraints.BOTH;
@@ -117,6 +122,8 @@ public class ClawAutonAction extends AutonAction {
                 millisField.setText(millis + "");
             }
         });
+        millisField.addFocusListener(new ActionFocusListener(millisField));
+        getSaveStateListener().addComponent(millisField);
         gbc.gridx = 1;
         gbc.gridy = 4;
         gbc.fill = GridBagConstraints.BOTH;

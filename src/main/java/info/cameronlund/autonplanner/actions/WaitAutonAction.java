@@ -1,6 +1,7 @@
 package info.cameronlund.autonplanner.actions;
 
 import com.google.gson.JsonObject;
+import info.cameronlund.autonplanner.listeners.ActionFocusListener;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -45,6 +46,8 @@ public class WaitAutonAction extends AutonAction {
                 millisField.setText(millis + "");
             }
         });
+        millisField.addFocusListener(new ActionFocusListener(millisField));
+        getSaveStateListener().addComponent(millisField);
         millisField.setEnabled(false);
         gbc.gridx = 1;
         gbc.gridy = 4;

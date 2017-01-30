@@ -1,6 +1,7 @@
 package info.cameronlund.autonplanner.actions;
 
 import com.google.gson.JsonObject;
+import info.cameronlund.autonplanner.listeners.SaveStateListener;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -16,6 +17,7 @@ public abstract class AutonAction {
     private AutonActionWrapper wrapper;
     private JPanel content;
     private Color color = Color.RED;
+    private SaveStateListener saveStateListener = new SaveStateListener();
 
     public AutonAction(AutonActionWrapper wrapper) {
         this.wrapper = wrapper;
@@ -55,4 +57,12 @@ public abstract class AutonAction {
     public abstract void loadJson(JsonObject object);
 
     public abstract JsonObject toJson();
+
+    public void saveState() {
+        saveStateListener.callActions();
+    }
+
+    protected SaveStateListener getSaveStateListener() {
+        return saveStateListener;
+    }
 }

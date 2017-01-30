@@ -1,6 +1,7 @@
 package info.cameronlund.autonplanner.actions;
 
 import com.google.gson.JsonObject;
+import info.cameronlund.autonplanner.listeners.ActionFocusListener;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
@@ -15,7 +16,7 @@ import java.awt.*;
  */
 public class DriveAutonAction extends AutonAction {
     private int distance = 0;
-    JTextField distField;
+    private JTextField distField;
 
     public DriveAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
@@ -48,6 +49,8 @@ public class DriveAutonAction extends AutonAction {
                 distField.setText(distance + "");
             }
         });
+        distField.addFocusListener(new ActionFocusListener(distField));
+        getSaveStateListener().addComponent(distField);
         gbc.gridx = 1;
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
@@ -88,7 +91,7 @@ public class DriveAutonAction extends AutonAction {
             return;
         }
         distance = object.get("distance").getAsInt();
-        distField.setText(distance+"");
+        distField.setText(distance + "");
     }
 
     @Override

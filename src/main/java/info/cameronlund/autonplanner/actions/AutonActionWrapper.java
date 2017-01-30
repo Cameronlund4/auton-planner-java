@@ -133,8 +133,11 @@ public class AutonActionWrapper {
     public void setSelected(boolean selected) {
         if (selected)
             titleGraphic.setBackground(Color.gray);
-        else
+        else {
             titleGraphic.setBackground(defaultBg);
+            if (action != null)
+                action.saveState();
+        }
         this.selected = selected;
     }
 
