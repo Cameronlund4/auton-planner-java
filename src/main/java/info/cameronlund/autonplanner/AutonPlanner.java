@@ -165,9 +165,7 @@ public class AutonPlanner {
         autonNameField.setMaximumSize(new Dimension(150, 30));
         autonNameField.addActionListener(e -> {
             autonName = autonNameField.getText();
-            manager.setAutonName(autonName);
         });
-        manager.setAutonName(autonName);
         autonNameField.setText(autonName);
 
         gbc.fill = GridBagConstraints.VERTICAL;

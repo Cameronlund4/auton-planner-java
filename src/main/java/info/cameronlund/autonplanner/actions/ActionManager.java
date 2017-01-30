@@ -23,7 +23,6 @@ public class ActionManager {
     private JComboBox<String> actionTypeBox;
     private JFrame frame;
     private JPanel optionsPanel;
-    private String autonName = "unset_name";
     private int i = 0;
 
     public ActionManager(JFrame frame) {
@@ -56,13 +55,21 @@ public class ActionManager {
                             setSelected(action);
                         } else if (pressed.contains(45) && pressed.contains(KeyEvent.VK_CONTROL)) { // Ctrl and -
                             if (selected != null) {
+                                AutonActionWrapper action = createNewAction();
+                                addBeforeSelected(action);
+                                setSelected(action);
+                            }
+                        } else if ((pressed.contains(KeyEvent.VK_BACK_SPACE) || (pressed.contains(KeyEvent.VK_DELETE)))
+                                && pressed.contains(KeyEvent.VK_CONTROL)) { // Ctrl and backspace or delete
+                            if (selected != null) {
                                 int selectedIndex = actions.indexOf(selected);
                                 remove(selected);
                                 if (actions.size() > 0)
                                     setSelected(actions.get(actions.size() - 1 >= selectedIndex ?
                                             selectedIndex : selectedIndex - 1));
                             }
-                        } else if (pressed.contains(KeyEvent.VK_DOWN) && pressed.contains(KeyEvent.VK_CONTROL)) { // Ctrl and down
+                        } else
+                        if (pressed.contains(KeyEvent.VK_DOWN) && pressed.contains(KeyEvent.VK_CONTROL)) { // Ctrl and down
                             if (currentIndex + 1 <= actions.size() - 1)
                                 if (actions.size() == 0)
                                     return false;
@@ -241,10 +248,6 @@ public class ActionManager {
 
     public JFrame getFrame() {
         return frame;
-    }
-
-    public void setAutonName(String autonName) {
-        this.autonName = autonName;
     }
 
     public JsonArray toJson() {
