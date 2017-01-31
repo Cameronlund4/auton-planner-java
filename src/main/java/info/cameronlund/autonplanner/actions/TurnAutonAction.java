@@ -100,4 +100,9 @@ public class TurnAutonAction extends AutonAction {
         object.addProperty("angleDelta", angleDelta);
         return object;
     }
+
+    public void setAngleDelta(float angleDelta) {
+        this.angleDelta = angleDelta;
+        angleField.setText((int)angleDelta+"");
+    }
 }

@@ -153,6 +153,11 @@ public class ActionManager {
         add(action, index, actions.indexOf(selected));
     }
 
+    public void addAfterSelected(AutonActionWrapper action) {
+        // TODO Impl
+        add(action);
+    }
+
     public void add(AutonActionWrapper action, int graphicIndex, int listIndex) {
         actions.add(listIndex, action);
         JPanel titleGraphic = action.getTitleGraphic();

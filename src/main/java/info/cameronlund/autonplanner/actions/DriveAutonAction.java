@@ -103,4 +103,9 @@ public class DriveAutonAction extends AutonAction {
         // TODO Implement
         return object;
     }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
+        distField.setText(distance+"");
+    }
 }

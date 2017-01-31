@@ -1,7 +1,7 @@
 package info.cameronlund.autonplanner.panels;
 
 import info.cameronlund.autonplanner.AutonPlanner;
-import info.cameronlund.autonplanner.actions.ActionManager;
+import info.cameronlund.autonplanner.actions.*;
 import info.cameronlund.autonplanner.gameobjects.Cube;
 import info.cameronlund.autonplanner.gameobjects.GameObject;
 import info.cameronlund.autonplanner.gameobjects.Star;
@@ -17,13 +17,9 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
 
 
 public class FieldPanel extends JPanel {
-    private HashMap<ArrayList<Point>, Color> lines = new HashMap<>();
     private BufferedImage fieldImage;
     private Star[] stars = new Star[24];
     private Cube[] cubes = new Cube[4];
@@ -108,12 +104,6 @@ public class FieldPanel extends JPanel {
         farZone.paint(this, g);
 
         robot.paint(g);
-
-        for (Map.Entry<ArrayList<Point>, Color> set : lines.entrySet()) {
-            g.setColor(set.getValue());
-            g.drawLine((int) set.getKey().get(0).getX(), (int) set.getKey().get(0).getY(),
-                    (int) set.getKey().get(1).getX(), (int) set.getKey().get(1).getY());
-        }
     }
 
     public void reset() {
@@ -140,23 +130,32 @@ public class FieldPanel extends JPanel {
     }
 
     public class Test {
-        private final Random r = new Random();
-        private Point pos1;
-
         public Test(FieldPanel panel) {
             new FieldClickListener(panel) {
                 @Override
                 public void fieldClicked(int x, int y) {
-                    if (pos1 == null) {
-                        pos1 = new Point(x, y);
-                    } else {
-                        ArrayList<Point> points = new ArrayList<>();
-                        points.add(pos1);
-                        pos1 = new Point(x, y);
-                        points.add(pos1);
-                        lines.put(points, Color.RED);
-                        repaint();
-                    }
+                    // Get all the info we need
+                    int x1 = robot.getPosX();
+                    int y1 = robot.getPosY();
+
+                    double robotRot = Math.toRadians(robot.getRotation());
+                    double lineRot = Math.atan((y - y1) / (x - x1));
+
+                    // Create the turn to the line
+                    AutonActionWrapper turnWrapper = manager.createNewAction();
+                    turnWrapper.setType(ActionType.TURN);
+                    ((TurnAutonAction) turnWrapper.getAction())
+                            .setAngleDelta((float) Math.toDegrees(robotRot - lineRot));
+                    manager.addAfterSelected(turnWrapper);
+                    manager.setSelected(turnWrapper);
+
+                    // Create the drive (166.666666667/2)*12
+                    AutonActionWrapper driveWrapper = manager.createNewAction();
+                    driveWrapper.setType(ActionType.DRIVE);
+                    ((DriveAutonAction) driveWrapper.getAction())
+                            .setDistance((int) (Math.sqrt(Math.pow(y -y1,2)+Math.pow(x -x1,2))/2)*24);
+                    manager.addAfterSelected(driveWrapper);
+                    manager.setSelected(driveWrapper);
                 }
             };
         }
