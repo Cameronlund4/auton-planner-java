@@ -43,7 +43,7 @@ public class DriveAutonAction extends AutonAction {
         distField.addActionListener(e -> {
             try {
                 distance = Integer.parseInt(distField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 distField.setText(distance + "");

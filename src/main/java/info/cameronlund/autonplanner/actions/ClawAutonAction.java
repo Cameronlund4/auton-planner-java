@@ -69,7 +69,7 @@ public class ClawAutonAction extends AutonAction {
         speedField.addActionListener(e -> {
             try {
                 speed = Integer.parseInt(speedField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 speedField.setText(speed + "");
@@ -92,7 +92,7 @@ public class ClawAutonAction extends AutonAction {
         targetField.addActionListener(e -> {
             try {
                 angleTarget = Integer.parseInt(targetField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 targetField.setText((int) angleTarget + "");
@@ -116,7 +116,7 @@ public class ClawAutonAction extends AutonAction {
         millisField.addActionListener(e -> {
             try {
                 millis = Integer.parseInt(millisField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 millisField.setText(millis + "");
@@ -141,6 +141,7 @@ public class ClawAutonAction extends AutonAction {
                     targetField.setEnabled(false);
                     break;
             }
+            wrapper.getManager().repaint();
         };
 
         // Target set

@@ -40,7 +40,7 @@ public class WaitAutonAction extends AutonAction {
         millisField.addActionListener(e -> {
             try {
                 millis = Integer.parseInt(millisField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 millisField.setText(millis + "");
@@ -57,6 +57,7 @@ public class WaitAutonAction extends AutonAction {
         listener = e -> {
             action = e.getActionCommand();
             millisField.setEnabled("delay".equals(action));
+            wrapper.getManager().repaint();
         };
 
         JLabel label = new JLabel("\u2022 Wait for: ");

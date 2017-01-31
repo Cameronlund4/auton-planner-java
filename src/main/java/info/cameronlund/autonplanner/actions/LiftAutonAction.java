@@ -46,7 +46,7 @@ public class LiftAutonAction extends AutonAction {
         angleField.addActionListener(e -> {
             try {
                 angleTarget = Integer.parseInt(angleField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 angleField.setText((int) angleTarget + "");
@@ -76,7 +76,7 @@ public class LiftAutonAction extends AutonAction {
         speedField.addActionListener(e -> {
             try {
                 speed = Integer.parseInt(speedField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 speedField.setText(speed + "");

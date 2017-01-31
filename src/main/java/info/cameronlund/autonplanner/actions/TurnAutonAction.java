@@ -46,7 +46,7 @@ public class TurnAutonAction extends AutonAction {
         angleField.addActionListener(e -> {
             try {
                 angleDelta = Integer.parseInt(angleField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 angleField.setText((int) angleDelta + "");
@@ -64,10 +64,13 @@ public class TurnAutonAction extends AutonAction {
         gbc.gridy = 1;
         content.add(typeLabel, gbc);
 
-        listener = e -> action = e.getActionCommand();
+        listener = e -> {
+            action = e.getActionCommand();
+            wrapper.getManager().repaint();
+        };
         ButtonGroup group = new ButtonGroup();
 
-        gyro = createRadioButton("Gyro turn","action1");
+        gyro = createRadioButton("Gyro turn", "action1");
         gyro.setSelected(true);
         group.add(gyro);
         gbc.gridx = 0;
@@ -89,7 +92,7 @@ public class TurnAutonAction extends AutonAction {
         speedField.addActionListener(e -> {
             try {
                 speed = Integer.parseInt(speedField.getText());
-                wrapper.getManager().getFrame().repaint();
+                wrapper.getManager().repaint();
             } catch (NumberFormatException ignored) {
                 ignored.printStackTrace();
                 speedField.setText(speed + "");
@@ -103,7 +106,7 @@ public class TurnAutonAction extends AutonAction {
         gbc.fill = GridBagConstraints.BOTH;
         content.add(speedField, gbc);
 
-        encoder = createRadioButton("Encoder turn","action2");
+        encoder = createRadioButton("Encoder turn", "action2");
         group.add(encoder);
         gbc.gridx = 0;
         gbc.gridy = 4;
@@ -162,9 +165,9 @@ public class TurnAutonAction extends AutonAction {
             return;
         }
         angleDelta = object.get("angleDelta").getAsInt();
-        angleField.setText((int) angleDelta+"");
+        angleField.setText((int) angleDelta + "");
         speed = object.get("speed").getAsInt();
-        speedField.setText(speed+"");
+        speedField.setText(speed + "");
         action = object.get("action").getAsString();
         switch (action) {
             case "action1":
@@ -182,13 +185,13 @@ public class TurnAutonAction extends AutonAction {
         object.addProperty("type", "TURN");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("angleDelta", angleDelta);
-        object.addProperty("action",action);
-        object.addProperty("speed",speed);
+        object.addProperty("action", action);
+        object.addProperty("speed", speed);
         return object;
     }
 
     public void setAngleDelta(float angleDelta) {
         this.angleDelta = angleDelta;
-        angleField.setText((int)angleDelta+"");
+        angleField.setText((int) angleDelta + "");
     }
 }

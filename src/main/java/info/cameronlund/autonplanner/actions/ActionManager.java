@@ -131,7 +131,7 @@ public class ActionManager {
             if (selected != null)
                 actionTypeBox.setSelectedIndex(selected.getType().ordinal());
         }
-        frame.repaint();
+        repaint();
     }
 
     public void clear() {
@@ -176,6 +176,7 @@ public class ActionManager {
         panel.removeMove(action.getTitleGraphic());
         if (selected == action)
             setSelected(null);
+        repaint();
     }
 
     public List<AutonActionWrapper> getActions() {
@@ -298,5 +299,9 @@ public class ActionManager {
             System.out.println("--------------------");
         }
         setSelected(null);
+    }
+
+    public void repaint() {
+        frame.repaint();
     }
 }
