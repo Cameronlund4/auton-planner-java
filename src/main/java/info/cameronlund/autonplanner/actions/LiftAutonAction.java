@@ -118,7 +118,7 @@ public class LiftAutonAction extends AutonAction {
                     object.get("type").getAsString());
             return;
         }
-        angleTarget = object.get("distance").getAsInt();
+        angleTarget = object.get("angleTarget").getAsInt();
         angleField.setText((int) angleTarget+"");
         speed = object.get("speed").getAsInt();
         speedField.setText(speed+"");

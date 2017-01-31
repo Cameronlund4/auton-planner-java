@@ -18,7 +18,7 @@ public abstract class FieldClickListener implements MouseListener {
     public void mouseClicked(MouseEvent e) {
         if (e.getX() - x > 687 || e.getY() - y > 687)
             return;
-        fieldClicked(e.getX() - x, e.getY() - y);
+        fieldClicked(e.getX() - x, e.getY() - y, e.getButton());
     }
 
     @Override
@@ -41,5 +41,5 @@ public abstract class FieldClickListener implements MouseListener {
         // Ignored
     }
 
-    public abstract void fieldClicked(int x, int y);
+    public abstract void fieldClicked(int x, int y, int button);
 }

@@ -23,6 +23,8 @@ public class AutonPlanner {
     private String autonName = "Unnamed Auton";
     private ActionManager manager;
     private FieldPanel fieldPanel;
+    private JTextField offsetField;
+    private JTextField angleField;
 
     public AutonPlanner() {
         // Main frame for the project
@@ -103,7 +105,7 @@ public class AutonPlanner {
         startingAngleWrapper.setLayout(new GridBagLayout());
         JLabel angleLabel = new JLabel("Start angle:");
         angleLabel.setOpaque(false);
-        JTextField angleField = new JTextField();
+        angleField = new JTextField();
         angleField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -131,7 +133,7 @@ public class AutonPlanner {
         offsetPosWrapper.setLayout(new GridBagLayout());
         JLabel offsetLabel = new JLabel("Start offset:");
         offsetLabel.setOpaque(false);
-        JTextField offsetField = new JTextField();
+        offsetField = new JTextField();
         offsetField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
                 BorderFactory.createEmptyBorder(5, 5, 5, 5)));
@@ -237,7 +239,34 @@ public class AutonPlanner {
         frame.pack();
         frame.setVisible(true);
 
-        loadJson(new JsonParser().parse("{\"autonName\":\"Tester auton\",\"startRot\":150,\"startX\":520,\"startY\":625,\"actions\":[{\"type\":\"DRIVE\",\"name\":\"Drive past cube\",\"distance\":-1150},{\"type\":\"DRIVE\",\"name\":\"Unnamed action 2\",\"distance\":0},{\"type\":\"CLAW\",\"name\":\"Deploy claw\",\"angleTarget\":0,\"speed\":127,\"millis\":500,\"action\":\"action2\"},{\"type\":\"DRIVE\",\"name\":\"Unnamed action 4\",\"distance\":0}]}").getAsJsonObject());
+        loadJson(new JsonParser().parse("{\"autonName\":\"Unnamed Auton\",\"startRot\":180,\"startX\":515,\"startY" +
+                "\":630,\"actions\":[{\"type\":\"DRIVE\",\"name\":\"Drive forward\",\"distance\":-1560},{\"type\":" +
+                "\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0,\"action\":\"waitForPID();\"},{\"type\":\"CLAW\"," +
+                "\"name\":\"Open claw\",\"angleTarget\":300,\"speed\":127,\"millis\":0,\"action\":\"action1\"},{\"type" +
+                "\":\"WAIT\",\"name\":\"Wait for claw\",\"millis\":0,\"action\":\"waitForClaw();\"},{\"type\":\"DRIVE\"," +
+                "\"name\":\"Drive to stars\",\"distance\":450},{\"type\":\"WAIT\",\"name\":\"Delay claw close\",\"millis" +
+                "\":200,\"action\":\"delay\"},{\"type\":\"CLAW\",\"name\":\"Close claw\",\"angleTarget\":0,\"speed\":127," +
+                "\"millis\":500,\"action\":\"action2\"},{\"type\":\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0," +
+                "\"action\":\"waitForPID();\"},{\"type\":\"DRIVE\",\"name\":\"Drive to fence\",\"distance\":-1550},{" +
+                "\"type\":\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0,\"action\":\"waitForPID();\"},{\"type\":" +
+                "\"LIFT\",\"name\":\"Lift stars\",\"speed\":127,\"angleTarget\":1900.0},{\"type\":\"WAIT\",\"name\":" +
+                "\"Wait for lift\",\"millis\":0,\"action\":\"waitForLift();\"},{\"type\":\"CLAW\",\"name\":\"Open claw" +
+                "\",\"angleTarget\":300,\"speed\":127,\"millis\":0,\"action\":\"action1\"},{\"type\":\"WAIT\",\"name\":" +
+                "\"Wait for claw\",\"millis\":0,\"action\":\"waitForClaw();\"},{\"type\":\"LIFT\",\"name\":\"Lower Lift" +
+                "\",\"speed\":127,\"angleTarget\":600.0},{\"type\":\"WAIT\",\"name\":\"Wait for lift\",\"millis\":0," +
+                "\"action\":\"waitForLift();\"},{\"type\":\"TURN\",\"name\":\"Turn to wall\",\"angleDelta\":90.0,\"action" +
+                "\":\"action1\",\"speed\":100},{\"type\":\"CLAW\",\"name\":\"Narrow claw\",\"angleTarget\":200,\"speed\":0," +
+                "\"millis\":0,\"action\":\"action1\"},{\"type\":\"DRIVE\",\"name\":\"Back towards star group\",\"distance\"" +
+                ":4800},{\"type\":\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0,\"action\":\"waitForPID();\"},{\"type" +
+                "\":\"CLAW\",\"name\":\"Close claw\",\"angleTarget\":0,\"speed\":0,\"millis\":500,\"action\":\"action2" +
+                "\"},{\"type\":\"LIFT\",\"name\":\"Lift stars\",\"speed\":127,\"angleTarget\":1500.0},{\"type\":\"TURN" +
+                "\",\"name\":\"Turn to fence\",\"angleDelta\":-90.0,\"action\":\"action1\",\"speed\":127},{\"type\":" +
+                "\"LIFT\",\"name\":\"Finish lift motion\",\"speed\":127,\"angleTarget\":1900.0},{\"type\":\"WAIT\"," +
+                "\"name\":\"Wait for lift\",\"millis\":0,\"action\":\"waitForLift();\"},{\"type\":\"CLAW\",\"name\":" +
+                "\"Open claw\",\"angleTarget\":300,\"speed\":127,\"millis\":0,\"action\":\"action1\"},{\"type\":\"WAIT" +
+                "\",\"name\":\"Wait for claw\",\"millis\":0,\"action\":\"waitForClaw();\"},{\"type\":\"LIFT\",\"name\":" +
+                "\"Lower lift\",\"speed\":127,\"angleTarget\":600.0},{\"type\":\"TURN\",\"name\":\"Turn to cube\"," +
+                "\"angleDelta\":-10.0,\"action\":\"action1\",\"speed\":100}]}\n").getAsJsonObject());
 
         new Thread(() -> {
             while (true) {
@@ -291,6 +320,8 @@ public class AutonPlanner {
         autonName = object.get("autonName").getAsString();
         manager.loadJson(object.get("actions").getAsJsonArray());
         startingRotation = object.get("startRot").getAsInt();
+        angleField.setText(startingRotation + "");
+        offsetField.setText(object.get("startX").getAsInt() + "," + object.get("startY").getAsInt());
         fieldPanel.getRobot().setRestingReturn(object.get("startX").getAsInt(), object.get("startY").getAsInt());
     }
 

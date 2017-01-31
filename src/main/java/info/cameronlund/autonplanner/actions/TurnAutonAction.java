@@ -8,10 +8,17 @@ import info.cameronlund.autonplanner.robot.Robot;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 public class TurnAutonAction extends AutonAction {
     private float angleDelta = 0;
+    private int speed = 0;
     private JTextField angleField;
+    private JTextField speedField;
+    private String action = "action1";
+    private JRadioButton gyro;
+    private JRadioButton encoder;
+    private ActionListener listener;
 
     public TurnAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
@@ -51,7 +58,66 @@ public class TurnAutonAction extends AutonAction {
         gbc.gridy = 0;
         gbc.fill = GridBagConstraints.BOTH;
         content.add(angleField, gbc);
+
+        JLabel typeLabel = new JLabel("\u2022 Type: ");
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        content.add(typeLabel, gbc);
+
+        listener = e -> action = e.getActionCommand();
+        ButtonGroup group = new ButtonGroup();
+
+        gyro = createRadioButton("Gyro turn","action1");
+        gyro.setSelected(true);
+        group.add(gyro);
+        gbc.gridx = 0;
+        gbc.gridy = 2;
+        content.add(gyro, gbc);
+
+        JLabel label2 = new JLabel("          \u2022 Speed: ");
+        gbc.gridx = 0;
+        gbc.gridy = 3;
+        content.add(label2, gbc);
+
+        speedField = new JTextField();
+        speedField.setText(speed + "");
+        speedField.setBorder(BorderFactory.createCompoundBorder(
+                new MatteBorder(1, 1, 1, 1, Color.GRAY),
+                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
+        speedField.setPreferredSize(new Dimension(75, 25));
+        speedField.setMaximumSize(new Dimension(75, 25));
+        speedField.addActionListener(e -> {
+            try {
+                speed = Integer.parseInt(speedField.getText());
+                wrapper.getManager().getFrame().repaint();
+            } catch (NumberFormatException ignored) {
+                ignored.printStackTrace();
+                speedField.setText(speed + "");
+            }
+        });
+        speedField.addFocusListener(new ActionFocusListener(speedField));
+        getSaveStateListener().addComponent(speedField);
+
+        gbc.gridx = 1;
+        gbc.gridy = 3;
+        gbc.fill = GridBagConstraints.BOTH;
+        content.add(speedField, gbc);
+
+        encoder = createRadioButton("Encoder turn","action2");
+        group.add(encoder);
+        gbc.gridx = 0;
+        gbc.gridy = 4;
+        content.add(encoder, gbc);
+
         setContent(content);
+    }
+
+    private JRadioButton createRadioButton(String text, String action) {
+        JRadioButton radioButton = new JRadioButton(text);
+        radioButton.setActionCommand(action);
+        radioButton.setFocusPainted(true);
+        radioButton.addActionListener(listener);
+        return radioButton;
     }
 
     @Override
@@ -78,7 +144,14 @@ public class TurnAutonAction extends AutonAction {
 
         // Total drive ticks/point turn rotation: ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))*360
         // Ticks/degree point turn rotation ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))
-        return String.format("pidDrivePoint(%d); // " + getWrapper().getActionName(), (int) (angleDelta * 3.75f));
+        switch (action) {
+            case "action2":
+                return String.format("pidDrivePoint(%d * sideMult); // " + getWrapper().getActionName(), (int) (angleDelta * 5.21566151f));
+            case "action1":
+                return String.format("turnToAngle(%d * sideMult, %d * sideMult); // " + getWrapper().getActionName(), ((int) angleDelta * -10), speed); // TODO Implement gyro turn
+            default:
+                return "// !----- Failed to generate turn code here -----!";
+        }
     }
 
     @Override
@@ -88,8 +161,19 @@ public class TurnAutonAction extends AutonAction {
                     object.get("type").getAsString());
             return;
         }
-        angleDelta = object.get("distance").getAsInt();
+        angleDelta = object.get("angleDelta").getAsInt();
         angleField.setText((int) angleDelta+"");
+        speed = object.get("speed").getAsInt();
+        speedField.setText(speed+"");
+        action = object.get("action").getAsString();
+        switch (action) {
+            case "action1":
+                gyro.setSelected(true);
+                break;
+            case "action2":
+                encoder.setSelected(true);
+                break;
+        }
     }
 
     @Override
@@ -98,6 +182,8 @@ public class TurnAutonAction extends AutonAction {
         object.addProperty("type", "TURN");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("angleDelta", angleDelta);
+        object.addProperty("action",action);
+        object.addProperty("speed",speed);
         return object;
     }
 

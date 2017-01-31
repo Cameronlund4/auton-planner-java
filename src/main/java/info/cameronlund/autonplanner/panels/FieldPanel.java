@@ -14,6 +14,7 @@ import info.cameronlund.autonplanner.zones.NearZone;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -133,30 +134,39 @@ public class FieldPanel extends JPanel {
         public Test(FieldPanel panel) {
             new FieldClickListener(panel) {
                 @Override
-                public void fieldClicked(int x, int y) {
+                public void fieldClicked(int x, int y, int button) {
                     // Get all the info we need
                     int x1 = robot.getPosX();
                     int y1 = robot.getPosY();
+                    System.out.println("X: " + x + " Y: " + y + " X1: " + x1 + " Y1: " + y1);
 
                     double robotRot = Math.toRadians(robot.getRotation());
-                    double lineRot = Math.atan((y - y1) / (x - x1));
+                    System.out.println("Robot rot: " + robotRot + "," + Math.toDegrees(robotRot));
+                    double lineRot = Math.atan((double) (y1 - y) / (double) (x1 - x)) + (Math.PI / 2);
+                    if (x1 > x)
+                        lineRot += Math.PI;
+                    System.out.println("Line rot: " + lineRot + "," + Math.toDegrees(lineRot));
+                    int distance = (int) (Math.sqrt(Math.pow(y - y1, 2) + Math.pow(x - x1, 2)) / 2) * 24;
 
                     // Create the turn to the line
                     AutonActionWrapper turnWrapper = manager.createNewAction();
                     turnWrapper.setType(ActionType.TURN);
                     ((TurnAutonAction) turnWrapper.getAction())
-                            .setAngleDelta((float) Math.toDegrees(robotRot - lineRot));
+                            .setAngleDelta((float) Math.toDegrees(lineRot - robotRot));
                     manager.addAfterSelected(turnWrapper);
                     manager.setSelected(turnWrapper);
 
-                    // Create the drive (166.666666667/2)*12
-                    AutonActionWrapper driveWrapper = manager.createNewAction();
-                    driveWrapper.setType(ActionType.DRIVE);
-                    ((DriveAutonAction) driveWrapper.getAction())
-                            .setDistance((int) (Math.sqrt(Math.pow(y -y1,2)+Math.pow(x -x1,2))/2)*24);
-                    manager.addAfterSelected(driveWrapper);
-                    manager.setSelected(driveWrapper);
+                    if (button == MouseEvent.BUTTON1) {
+                        // Create the drive (166.666666667/2)*12
+                        AutonActionWrapper driveWrapper = manager.createNewAction();
+                        driveWrapper.setType(ActionType.DRIVE);
+                        ((DriveAutonAction) driveWrapper.getAction())
+                                .setDistance(distance);
+                        manager.addAfterSelected(driveWrapper);
+                        manager.setSelected(driveWrapper);
+                    }
                 }
+
             };
         }
     }
