@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import info.cameronlund.autonplanner.actions.ActionManager;
 import info.cameronlund.autonplanner.actions.ActionType;
+import info.cameronlund.autonplanner.filters.AutonPlanerFileFilter;
+import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
 import info.cameronlund.autonplanner.panels.FieldPanel;
 
@@ -12,7 +14,11 @@ import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 public class AutonPlanner {
     private static boolean isSkill = false;
@@ -25,12 +31,14 @@ public class AutonPlanner {
     private FieldPanel fieldPanel;
     private JTextField offsetField;
     private JTextField angleField;
+    private File currentFile;
+    final JMenuBar menuBar = new JMenuBar();
 
     public AutonPlanner() {
         // Main frame for the project
         JFrame frame = new JFrame("[2616E] Auton Planner");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(1393, 715));
+        frame.setPreferredSize(new Dimension(1393, 738));
         frame.setResizable(false);
         frame.setMinimumSize(frame.getPreferredSize());
         BorderLayout layout = (BorderLayout) frame.getLayout();
@@ -228,45 +236,92 @@ public class AutonPlanner {
         sidePanel.add(actionSettingsPanel, BorderLayout.CENTER);
         manager.setOptionsPanel(actionSettingsPanel);
 
+        // Menu creation ------------
+        JMenu fileMenu = new JMenu("File");
+
+        JMenuItem clearMenuItem = new JMenuItem("Clear");
+        clearMenuItem.setActionCommand("Clear");
+        clearMenuItem.addActionListener(l -> {
+            System.out.println("Pressed clear");
+            manager.clear();
+        });
+        fileMenu.add(clearMenuItem);
+
+        JMenuItem openMenuItem = new JMenuItem("Open");
+        openMenuItem.setActionCommand("Open");
+        openMenuItem.addActionListener(l -> {
+            System.out.println("Pressed open");
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(currentFile == null ? new File(System.getProperty("user.home")) :
+                    currentFile.getParentFile());
+            fileChooser.setFileFilter(new AutonPlanerFileFilter());
+            int result = fileChooser.showOpenDialog(frame);
+            if (result == JFileChooser.APPROVE_OPTION) { // If they selected a file
+                currentFile = fileChooser.getSelectedFile();
+                manager.clear();
+                try {
+                    String line = new Scanner(currentFile).nextLine();
+                    if (line == null)
+                        return;
+                    loadJson(new JsonParser().parse(line).getAsJsonObject());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        JMenuItem saveMenuItem = new JMenuItem("Save");
+
+        JMenuItem saveAsMenuItem = new JMenuItem("Save as");
+        saveAsMenuItem.setActionCommand("Save as");
+        saveAsMenuItem.addActionListener(l -> {
+            System.out.println("Pressed save as");
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(currentFile == null ? new File(System.getProperty("user.home")) :
+                    currentFile.getParentFile());
+            fileChooser.setSelectedFile(currentFile == null ? new File("newAuton.apf") : currentFile);
+            fileChooser.setFileFilter(new AutonPlanerFileFilter());
+            int result = fileChooser.showSaveDialog(frame);
+            if (result == JFileChooser.APPROVE_OPTION) { // If they selected a file
+                currentFile = fileChooser.getSelectedFile();
+                new ActionCallHelper().callActions(saveMenuItem);
+            }
+        });
+        fileMenu.add(saveAsMenuItem);
+
+        fileMenu.add(openMenuItem);
+        saveMenuItem.setActionCommand("Save");
+        saveMenuItem.addActionListener(l -> {
+            System.out.println("Pressed save");
+            if (currentFile == null) {
+                new ActionCallHelper().callActions(saveAsMenuItem);
+                return;
+            }
+            try {
+                PrintWriter writer = new PrintWriter(currentFile);
+                writer.print(toJson().toString());
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+        fileMenu.add(saveMenuItem);
+
+        menuBar.add(fileMenu);
+        // End menu creation ---------
+
         // Add our content to the frame
         mainPanel.add(fieldPanel, BorderLayout.CENTER);
         mainPanel.add(actionList, BorderLayout.EAST);
         contentPanel.add(mainPanel, BorderLayout.CENTER);
         contentPanel.add(sidePanel, BorderLayout.EAST);
+        frame.setJMenuBar(menuBar);
         frame.getContentPane().add(contentPanel, BorderLayout.CENTER);
 
         // Display frame
         frame.pack();
         frame.setVisible(true);
-
-        loadJson(new JsonParser().parse("{\"autonName\":\"Unnamed Auton\",\"startRot\":180,\"startX\":515,\"startY" +
-                "\":630,\"actions\":[{\"type\":\"DRIVE\",\"name\":\"Drive forward\",\"distance\":-1560},{\"type\":" +
-                "\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0,\"action\":\"waitForPID();\"},{\"type\":\"CLAW\"," +
-                "\"name\":\"Open claw\",\"angleTarget\":300,\"speed\":127,\"millis\":0,\"action\":\"action1\"},{\"type" +
-                "\":\"WAIT\",\"name\":\"Wait for claw\",\"millis\":0,\"action\":\"waitForClaw();\"},{\"type\":\"DRIVE\"," +
-                "\"name\":\"Drive to stars\",\"distance\":450},{\"type\":\"WAIT\",\"name\":\"Delay claw close\",\"millis" +
-                "\":200,\"action\":\"delay\"},{\"type\":\"CLAW\",\"name\":\"Close claw\",\"angleTarget\":0,\"speed\":127," +
-                "\"millis\":500,\"action\":\"action2\"},{\"type\":\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0," +
-                "\"action\":\"waitForPID();\"},{\"type\":\"DRIVE\",\"name\":\"Drive to fence\",\"distance\":-1550},{" +
-                "\"type\":\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0,\"action\":\"waitForPID();\"},{\"type\":" +
-                "\"LIFT\",\"name\":\"Lift stars\",\"speed\":127,\"angleTarget\":1900.0},{\"type\":\"WAIT\",\"name\":" +
-                "\"Wait for lift\",\"millis\":0,\"action\":\"waitForLift();\"},{\"type\":\"CLAW\",\"name\":\"Open claw" +
-                "\",\"angleTarget\":300,\"speed\":127,\"millis\":0,\"action\":\"action1\"},{\"type\":\"WAIT\",\"name\":" +
-                "\"Wait for claw\",\"millis\":0,\"action\":\"waitForClaw();\"},{\"type\":\"LIFT\",\"name\":\"Lower Lift" +
-                "\",\"speed\":127,\"angleTarget\":600.0},{\"type\":\"WAIT\",\"name\":\"Wait for lift\",\"millis\":0," +
-                "\"action\":\"waitForLift();\"},{\"type\":\"TURN\",\"name\":\"Turn to wall\",\"angleDelta\":90.0,\"action" +
-                "\":\"action1\",\"speed\":100},{\"type\":\"CLAW\",\"name\":\"Narrow claw\",\"angleTarget\":200,\"speed\":0," +
-                "\"millis\":0,\"action\":\"action1\"},{\"type\":\"DRIVE\",\"name\":\"Back towards star group\",\"distance\"" +
-                ":4800},{\"type\":\"WAIT\",\"name\":\"Wait for drive\",\"millis\":0,\"action\":\"waitForPID();\"},{\"type" +
-                "\":\"CLAW\",\"name\":\"Close claw\",\"angleTarget\":0,\"speed\":0,\"millis\":500,\"action\":\"action2" +
-                "\"},{\"type\":\"LIFT\",\"name\":\"Lift stars\",\"speed\":127,\"angleTarget\":1500.0},{\"type\":\"TURN" +
-                "\",\"name\":\"Turn to fence\",\"angleDelta\":-90.0,\"action\":\"action1\",\"speed\":127},{\"type\":" +
-                "\"LIFT\",\"name\":\"Finish lift motion\",\"speed\":127,\"angleTarget\":1900.0},{\"type\":\"WAIT\"," +
-                "\"name\":\"Wait for lift\",\"millis\":0,\"action\":\"waitForLift();\"},{\"type\":\"CLAW\",\"name\":" +
-                "\"Open claw\",\"angleTarget\":300,\"speed\":127,\"millis\":0,\"action\":\"action1\"},{\"type\":\"WAIT" +
-                "\",\"name\":\"Wait for claw\",\"millis\":0,\"action\":\"waitForClaw();\"},{\"type\":\"LIFT\",\"name\":" +
-                "\"Lower lift\",\"speed\":127,\"angleTarget\":600.0},{\"type\":\"TURN\",\"name\":\"Turn to cube\"," +
-                "\"angleDelta\":-10.0,\"action\":\"action1\",\"speed\":100}]}\n").getAsJsonObject());
 
         new Thread(() -> {
             while (true) {

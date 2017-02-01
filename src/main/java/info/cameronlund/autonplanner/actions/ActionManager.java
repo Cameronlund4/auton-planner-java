@@ -137,6 +137,7 @@ public class ActionManager {
     public void clear() {
         panel.resetList();
         actions = new ArrayList<>();
+        repaint();
     }
 
     public void addBeforeSelected(AutonActionWrapper action) {
