@@ -322,18 +322,6 @@ public class AutonPlanner {
         // Display frame
         frame.pack();
         frame.setVisible(true);
-
-        new Thread(() -> {
-            while (true) {
-                System.out.println(toJson().toString());
-                try {
-                    Thread.sleep(10000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    return;
-                }
-            }
-        }).start();
     }
 
     public static boolean isPreloadLoaded() {
