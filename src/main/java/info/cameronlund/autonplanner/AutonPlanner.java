@@ -32,7 +32,6 @@ public class AutonPlanner {
     private JTextField offsetField;
     private JTextField angleField;
     private File currentFile;
-    final JMenuBar menuBar = new JMenuBar();
 
     public AutonPlanner() {
         // Main frame for the project
@@ -308,6 +307,7 @@ public class AutonPlanner {
         });
         fileMenu.add(saveMenuItem);
 
+        JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
         // End menu creation ---------
 
@@ -364,16 +364,17 @@ public class AutonPlanner {
         manager.loadJson(object.get("actions").getAsJsonArray());
         startingRotation = object.get("startRot").getAsInt();
         angleField.setText(startingRotation + "");
-        offsetField.setText(object.get("startX").getAsInt() + "," + object.get("startY").getAsInt());
-        fieldPanel.getRobot().setRestingReturn(object.get("startX").getAsInt(), object.get("startY").getAsInt());
+        offsetField.setText(object.get("startX").getAsInt() + "," + -1 *object.get("startY").getAsInt());
+        fieldPanel.getRobot().setResting(515 + object.get("startX").getAsInt(),
+                 630 + object.get("startY").getAsInt());
     }
 
     public JsonObject toJson() {
         JsonObject file = new JsonObject();
         file.addProperty("autonName", autonName);
         file.addProperty("startRot", startingRotation);
-        file.addProperty("startX", fieldPanel.getRobot().getRestingX());
-        file.addProperty("startY", fieldPanel.getRobot().getRestingY());
+        file.addProperty("startX", fieldPanel.getRobot().getRestingX() - 515);
+        file.addProperty("startY", fieldPanel.getRobot().getRestingY() - 630);
         file.add("actions", manager.toJson());
         System.out.println(file.toString());
         return file;
