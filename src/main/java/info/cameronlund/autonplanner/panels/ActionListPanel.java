@@ -73,6 +73,8 @@ public class ActionListPanel extends JPanel {
         scroll.getVerticalScrollBar().setUI(new CustomScrollbarUI());
         scroll.getVerticalScrollBar().setBorder(new MatteBorder(0, 1, 0, 0, Color.GRAY));
         add(scroll);
+        revalidate();
+        repaint();
     }
 
     public JPanel getMainList() {
