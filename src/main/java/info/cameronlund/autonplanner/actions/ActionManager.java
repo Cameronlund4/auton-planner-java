@@ -18,14 +18,16 @@ public class ActionManager {
     private List<AutonActionWrapper> actions = new ArrayList<>();
     private AutonActionWrapper selected;
     private JTextField actionNameField;
-    private JComboBox<String> actionTypeBox;
     private JFrame frame;
     private JPanel optionsPanel;
     private int i = 0;
+    private ArrayList<String> actionTypes;
+    private ActionFactory factory;
+    private JComboBox<String> modeListCombo;
 
-    public ActionManager(JFrame frame) {
-        this.frame = frame;
-        frame.setFocusable(true);
+    public ActionManager(ArrayList<String> actionTypes, ActionFactory factory) {
+        this.actionTypes = actionTypes;
+        this.factory = factory;
         // Let the user navigate the actions with the arrow keys
         final List<Integer> pressed = new ArrayList<>();
         KeyboardFocusManager.getCurrentKeyboardFocusManager()
@@ -66,8 +68,7 @@ public class ActionManager {
                                     setSelected(actions.get(actions.size() - 1 >= selectedIndex ?
                                             selectedIndex : selectedIndex - 1));
                             }
-                        } else
-                        if (pressed.contains(KeyEvent.VK_DOWN) && pressed.contains(KeyEvent.VK_CONTROL)) { // Ctrl and down
+                        } else if (pressed.contains(KeyEvent.VK_DOWN) && pressed.contains(KeyEvent.VK_CONTROL)) { // Ctrl and down
                             if (currentIndex + 1 <= actions.size() - 1)
                                 if (actions.size() == 0)
                                     return false;
@@ -93,6 +94,18 @@ public class ActionManager {
             AutonActionWrapper action = createNewAction();
             addBeforeSelected(action);
             setSelected(action);
+        });
+
+        modeListCombo = new JComboBox<>(actionTypes.toArray(new String[actionTypes.size()]));
+        modeListCombo.setOpaque(false);
+        modeListCombo.setPreferredSize(new Dimension(100, 30));
+        modeListCombo.setMaximumSize(new Dimension(100, 30));
+        modeListCombo.setSelectedIndex(0);
+        modeListCombo.setEnabled(selected != null);
+        modeListCombo.addActionListener((e) -> {
+            if (selected != null)
+                if (modeListCombo.getSelectedIndex() != -1)
+                    selected.setType(actionTypes.get(modeListCombo.getSelectedIndex()));
         });
     }
 
@@ -126,10 +139,12 @@ public class ActionManager {
             actionNameField.setEnabled(selected != null);
             actionNameField.setText(selected == null ? "" : selected.getActionName());
         }
-        if (actionTypeBox != null) {
-            actionTypeBox.setEnabled(selected != null);
+        if (modeListCombo != null) {
+            modeListCombo.setEnabled(selected != null);
             if (selected != null)
-                actionTypeBox.setSelectedIndex(selected.getType().ordinal());
+                modeListCombo.setSelectedIndex(typeIndex(selected.getType()));
+            else
+                modeListCombo.setSelectedIndex(0);
         }
         repaint();
     }
@@ -212,16 +227,6 @@ public class ActionManager {
         });
     }
 
-    public void setActionTypeBox(JComboBox<String> actionTypeBox) {
-        this.actionTypeBox = actionTypeBox;
-        actionTypeBox.setEnabled(selected != null);
-        actionTypeBox.addActionListener((e) -> {
-            if (selected != null) {
-                selected.setType(ActionType.values()[actionTypeBox.getSelectedIndex()]);
-            }
-        });
-    }
-
     public void clearContent() {
         if (optionsPanel != null) {
             optionsPanel.removeAll();
@@ -276,23 +281,7 @@ public class ActionManager {
             wrapper.setActionName(object.get("name").getAsString());
             System.out.println(object.get("type").getAsString());
             // Set the type of the action
-            switch (object.get("type").getAsString()) {
-                case "CLAW":
-                    wrapper.setType(ActionType.CLAW);
-                    break;
-                case "DRIVE":
-                    wrapper.setType(ActionType.DRIVE);
-                    break;
-                case "LIFT":
-                    wrapper.setType(ActionType.LIFT);
-                    break;
-                case "TURN":
-                    wrapper.setType(ActionType.TURN);
-                    break;
-                case "WAIT":
-                    wrapper.setType(ActionType.WAIT);
-                    break;
-            }
+            wrapper.setType(object.get("type").getAsString());
             // Load the data for the action
             wrapper.getAction().loadJson(object);
             // Load the action
@@ -304,5 +293,29 @@ public class ActionManager {
 
     public void repaint() {
         frame.repaint();
+    }
+
+    public void setFrame(JFrame frame) {
+        frame.setFocusable(true);
+        this.frame = frame;
+    }
+
+    public ArrayList<String> getActionTypes() {
+        return actionTypes;
+    }
+
+    public AutonAction createAction(String type, AutonActionWrapper wrapper) {
+        return factory.createAction(type, wrapper);
+    }
+
+    public JComboBox<String> getModeCombo() {
+        return modeListCombo;
+    }
+
+    public int typeIndex(String type) {
+        for (int i = 0; i < actionTypes.size(); i++)
+            if (actionTypes.get(i).equalsIgnoreCase(type))
+                return i;
+        return -1;
     }
 }

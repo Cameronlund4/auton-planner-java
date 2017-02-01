@@ -113,8 +113,8 @@ public class LiftAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        if (!object.get("type").getAsString().equalsIgnoreCase("LIFT")) {
-            System.out.println("Got bad type for " + "LIFT" + ", received " +
+        if (!object.get("type").getAsString().equalsIgnoreCase("Lift")) {
+            System.out.println("Got bad type for " + "Lift" + ", received " +
                     object.get("type").getAsString());
             return;
         }
@@ -127,7 +127,7 @@ public class LiftAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type", "LIFT");
+        object.addProperty("type", "Lift");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("speed", speed);
         object.addProperty("angleTarget", angleTarget);

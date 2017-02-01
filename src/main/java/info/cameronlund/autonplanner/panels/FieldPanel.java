@@ -1,7 +1,10 @@
 package info.cameronlund.autonplanner.panels;
 
 import info.cameronlund.autonplanner.AutonPlanner;
-import info.cameronlund.autonplanner.actions.*;
+import info.cameronlund.autonplanner.actions.ActionManager;
+import info.cameronlund.autonplanner.actions.AutonActionWrapper;
+import info.cameronlund.autonplanner.actions.DriveAutonAction;
+import info.cameronlund.autonplanner.actions.TurnAutonAction;
 import info.cameronlund.autonplanner.gameobjects.Cube;
 import info.cameronlund.autonplanner.gameobjects.GameObject;
 import info.cameronlund.autonplanner.gameobjects.Star;
@@ -150,7 +153,7 @@ public class FieldPanel extends JPanel {
 
                     // Create the turn to the line
                     AutonActionWrapper turnWrapper = manager.createNewAction();
-                    turnWrapper.setType(ActionType.TURN);
+                    turnWrapper.setType("Turn");
                     ((TurnAutonAction) turnWrapper.getAction())
                             .setAngleDelta((float) Math.toDegrees(lineRot - robotRot));
                     manager.addAfterSelected(turnWrapper);
@@ -159,7 +162,7 @@ public class FieldPanel extends JPanel {
                     if (button == MouseEvent.BUTTON1) {
                         // Create the drive (166.666666667/2)*12
                         AutonActionWrapper driveWrapper = manager.createNewAction();
-                        driveWrapper.setType(ActionType.DRIVE);
+                        driveWrapper.setType("Drive");
                         ((DriveAutonAction) driveWrapper.getAction())
                                 .setDistance(distance);
                         manager.addAfterSelected(driveWrapper);

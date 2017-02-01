@@ -159,8 +159,8 @@ public class TurnAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        if (!object.get("type").getAsString().equalsIgnoreCase("TURN")) {
-            System.out.println("Got bad type for " + "TURN" + ", received " +
+        if (!object.get("type").getAsString().equalsIgnoreCase("Turn")) {
+            System.out.println("Got bad type for " + "Turn" + ", received " +
                     object.get("type").getAsString());
             return;
         }
@@ -182,7 +182,7 @@ public class TurnAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type", "TURN");
+        object.addProperty("type", "Turn");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("angleDelta", angleDelta);
         object.addProperty("action", action);

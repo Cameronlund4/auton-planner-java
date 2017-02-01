@@ -199,8 +199,8 @@ public class ClawAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        if (!object.get("type").getAsString().equalsIgnoreCase("CLAW")) {
-            System.out.println("Got bad type for " + "CLAW" + ", received " +
+        if (!object.get("type").getAsString().equalsIgnoreCase("Claw")) {
+            System.out.println("Got bad type for " + "Claw" + ", received " +
                     object.get("type").getAsString());
             return;
         }
@@ -224,7 +224,7 @@ public class ClawAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type", "CLAW");
+        object.addProperty("type", "Claw");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("angleTarget", (int) angleTarget);
         object.addProperty("speed", speed);

@@ -85,8 +85,8 @@ public class DriveAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        if (!object.get("type").getAsString().equalsIgnoreCase("DRIVE")) {
-            System.out.println("Got bad type for " + "DRIVE" + ", received " +
+        if (!object.get("type").getAsString().equalsIgnoreCase("Drive")) {
+            System.out.println("Got bad type for " + "Drive" + ", received " +
                     object.get("type").getAsString());
             return;
         }
@@ -97,7 +97,7 @@ public class DriveAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type", "DRIVE");
+        object.addProperty("type", "Drive");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("distance", distance);
         // TODO Implement

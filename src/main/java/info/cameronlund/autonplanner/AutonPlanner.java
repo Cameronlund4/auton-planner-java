@@ -3,7 +3,6 @@ package info.cameronlund.autonplanner;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import info.cameronlund.autonplanner.actions.ActionManager;
-import info.cameronlund.autonplanner.actions.ActionType;
 import info.cameronlund.autonplanner.filters.AutonPlanerFileFilter;
 import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
@@ -32,8 +31,9 @@ public class AutonPlanner {
     private JTextField offsetField;
     private JTextField angleField;
     private File currentFile;
+    //"Drive", "Turn", "Lift", "Claw", "Wait"
 
-    public AutonPlanner() {
+    public AutonPlanner(ActionManager manager, FieldPanel fieldPanel) {
         // Main frame for the project
         JFrame frame = new JFrame("[2616E] Auton Planner");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -44,6 +44,12 @@ public class AutonPlanner {
         layout.setVgap(0);
         layout.setHgap(0);
 
+        this.manager = manager;
+        manager.setFrame(frame);
+
+        this.fieldPanel = fieldPanel;
+        fieldPanel.setManager(manager);
+
         JPanel contentPanel = new JPanel();
         contentPanel.setPreferredSize(new Dimension(1393, 715));
         contentPanel.setMinimumSize(contentPanel.getPreferredSize());
@@ -51,14 +57,8 @@ public class AutonPlanner {
         layout = (BorderLayout) contentPanel.getLayout();
         layout.setVgap(0);
         layout.setHgap(0);
-
-        manager = new ActionManager(frame);
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
-        // Load the field image, scaled 3 pixels -> 1 tick
-        fieldPanel = new FieldPanel("scale_field(2-1).png",
-                "cube.png", "star.png");
-        fieldPanel.setManager(manager);
 
         // Main panel containing field and list of moves
         JPanel mainPanel = new JPanel();
@@ -207,13 +207,6 @@ public class AutonPlanner {
         moveOptionPanel.setPreferredSize(new Dimension(400, 50));
         moveOptionPanel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
 
-        JComboBox<String> modeList = new JComboBox<>(ActionType.getTypesList());
-        modeList.setOpaque(false);
-        modeList.setPreferredSize(new Dimension(100, 30));
-        modeList.setMaximumSize(new Dimension(100, 30));
-        modeList.setSelectedIndex(0);
-        manager.setActionTypeBox(modeList);
-
         JTextField actionNameField = new JTextField();
         actionNameField.setBorder(BorderFactory.createCompoundBorder(
                 new MatteBorder(1, 1, 1, 1, Color.GRAY),
@@ -226,7 +219,7 @@ public class AutonPlanner {
         moveOptionPanel.add(actionNameField, gbc);
         gbc.gridx = 1;
         gbc.gridy = 0;
-        moveOptionPanel.add(modeList, gbc);
+        moveOptionPanel.add(manager.getModeCombo(), gbc);
 
         sidePanel.add(moveOptionPanel, BorderLayout.NORTH);
 
@@ -272,7 +265,7 @@ public class AutonPlanner {
 
         JMenuItem saveMenuItem = new JMenuItem("Save");
         JMenuItem saveAsMenuItem = new JMenuItem("Save as");
-        
+
         saveAsMenuItem.setActionCommand("Save as");
         saveAsMenuItem.addActionListener(l -> {
             System.out.println("Pressed save as");
@@ -363,9 +356,9 @@ public class AutonPlanner {
         manager.loadJson(object.get("actions").getAsJsonArray());
         startingRotation = object.get("startRot").getAsInt();
         angleField.setText(startingRotation + "");
-        offsetField.setText(object.get("startX").getAsInt() + "," + -1 *object.get("startY").getAsInt());
+        offsetField.setText(object.get("startX").getAsInt() + "," + -1 * object.get("startY").getAsInt());
         fieldPanel.getRobot().setResting(515 + object.get("startX").getAsInt(),
-                 630 + object.get("startY").getAsInt());
+                630 + object.get("startY").getAsInt());
         // TODO Load skills and preloaded state
     }
 
@@ -379,5 +372,9 @@ public class AutonPlanner {
         // TODO Save skills and preloaded state
         System.out.println(file.toString());
         return file;
+    }
+
+    public ArrayList<String> getActionTypes() {
+        return manager.getActionTypes();
     }
 }

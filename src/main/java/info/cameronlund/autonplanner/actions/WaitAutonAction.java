@@ -126,8 +126,8 @@ public class WaitAutonAction extends AutonAction {
 
     @Override
     public void loadJson(JsonObject object) {
-        if (!object.get("type").getAsString().equalsIgnoreCase("WAIT")) {
-            System.out.println("Got bad type for " + "WAIT" + ", received " +
+        if (!object.get("type").getAsString().equalsIgnoreCase("Wait")) {
+            System.out.println("Got bad type for " + "Wait" + ", received " +
                     object.get("type").getAsString());
             return;
         }
@@ -154,7 +154,7 @@ public class WaitAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type", "WAIT");
+        object.addProperty("type", "Wait");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("millis", millis);
         object.addProperty("action", action);
