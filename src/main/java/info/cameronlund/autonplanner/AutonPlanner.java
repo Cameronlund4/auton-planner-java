@@ -268,10 +268,11 @@ public class AutonPlanner {
                 }
             }
         });
+        fileMenu.add(openMenuItem);
 
         JMenuItem saveMenuItem = new JMenuItem("Save");
-
         JMenuItem saveAsMenuItem = new JMenuItem("Save as");
+        
         saveAsMenuItem.setActionCommand("Save as");
         saveAsMenuItem.addActionListener(l -> {
             System.out.println("Pressed save as");
@@ -286,9 +287,7 @@ public class AutonPlanner {
                 new ActionCallHelper().callActions(saveMenuItem);
             }
         });
-        fileMenu.add(saveAsMenuItem);
 
-        fileMenu.add(openMenuItem);
         saveMenuItem.setActionCommand("Save");
         saveMenuItem.addActionListener(l -> {
             System.out.println("Pressed save");
@@ -306,7 +305,7 @@ public class AutonPlanner {
 
         });
         fileMenu.add(saveMenuItem);
-
+        fileMenu.add(saveAsMenuItem);
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
         // End menu creation ---------
@@ -367,6 +366,7 @@ public class AutonPlanner {
         offsetField.setText(object.get("startX").getAsInt() + "," + -1 *object.get("startY").getAsInt());
         fieldPanel.getRobot().setResting(515 + object.get("startX").getAsInt(),
                  630 + object.get("startY").getAsInt());
+        // TODO Load skills and preloaded state
     }
 
     public JsonObject toJson() {
@@ -376,6 +376,7 @@ public class AutonPlanner {
         file.addProperty("startX", fieldPanel.getRobot().getRestingX() - 515);
         file.addProperty("startY", fieldPanel.getRobot().getRestingY() - 630);
         file.add("actions", manager.toJson());
+        // TODO Save skills and preloaded state
         System.out.println(file.toString());
         return file;
     }
