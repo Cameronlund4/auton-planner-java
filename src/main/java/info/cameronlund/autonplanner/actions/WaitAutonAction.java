@@ -2,10 +2,12 @@ package info.cameronlund.autonplanner.actions;
 
 import com.google.gson.JsonObject;
 import info.cameronlund.autonplanner.listeners.ActionFocusListener;
+import info.cameronlund.autonplanner.robot.*;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
+import java.awt.Robot;
 import java.awt.event.ActionListener;
 
 public class WaitAutonAction extends AutonAction {
@@ -119,7 +121,7 @@ public class WaitAutonAction extends AutonAction {
     }
 
     @Override
-    public String renderCode() {
+    public String renderCode(info.cameronlund.autonplanner.robot.Robot robot) {
         return (!action.equals("delay") ? action : String.format("wait1MSec(%d);", millis))
                 + " // " + getWrapper().getActionName();
     }

@@ -142,7 +142,7 @@ public class TurnAutonAction extends AutonAction {
     }
 
     @Override
-    public String renderCode() {
+    public String renderCode(info.cameronlund.autonplanner.robot.Robot robot) {
         // ((sqrt((driveWidthHoles*0.5)^2 + (driveHeightHoles*0.5)^2)*pi)/((wheelSize)pi))*360
 
         // Total drive ticks/point turn rotation: ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))*360
@@ -151,7 +151,16 @@ public class TurnAutonAction extends AutonAction {
             case "action2":
                 return String.format("pidDrivePoint(%d * sideMult); // " + getWrapper().getActionName(), (int) (angleDelta * 5.21566151f));
             case "action1":
-                return String.format("turnToAngle(%d * sideMult, %d * sideMult); // " + getWrapper().getActionName(), ((int) angleDelta * -10), speed); // TODO Implement gyro turn
+
+                if(speed < 0)
+                    if(angleDelta > -180)
+                        speed *= -1;
+                else if(angleDelta > 180){
+                    speed *= -1;
+                }
+
+                return String.format("turnToAngle(%d * sideMult, %d * sideMult); // " + getWrapper().getActionName(),
+                        ((int) robot.getRotation() * -10), speed); // TODO Implement gyro turn
             default:
                 return "// !----- Failed to generate turn code here -----!";
         }

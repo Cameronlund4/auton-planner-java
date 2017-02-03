@@ -107,7 +107,7 @@ public class LiftAutonAction extends AutonAction {
     }
 
     @Override
-    public String renderCode() {
+    public String renderCode(info.cameronlund.autonplanner.robot.Robot robot) {
         return String.format("setLift(%d,%d); // " + getWrapper().getActionName(), (int) angleTarget, speed);
     }
 

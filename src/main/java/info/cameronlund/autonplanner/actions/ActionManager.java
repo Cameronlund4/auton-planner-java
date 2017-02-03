@@ -240,8 +240,8 @@ public class ActionManager {
     public void paint(Graphics g, Robot robot) {
         System.out.println("Code: -----------------------------------------------------");
         for (int i = 0; i < actions.indexOf(selected) + 1; i++) {
-            System.out.println(actions.get(i).getAction().renderCode());
             robot = actions.get(i).getAction().renderWithGraphics(robot, g);
+            System.out.println(actions.get(i).getAction().renderCode(robot));
         }
         System.out.println("-----------------------------------------------------------");
     }
