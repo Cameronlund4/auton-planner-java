@@ -4,6 +4,7 @@ package info.cameronlund.autonplanner.actions;
 import com.google.gson.JsonObject;
 import info.cameronlund.autonplanner.listeners.ActionFocusListener;
 import info.cameronlund.autonplanner.robot.Robot;
+import info.cameronlund.autonplanner.AutonPlanner;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -162,7 +163,7 @@ public class TurnAutonAction extends AutonAction {
                 }
 
                 return String.format("turnToAngle(%d * sideMult, %d * sideMult); // " + getWrapper().getActionName(),
-                        ((int) robot.getRotation() * -10), speed); // TODO Implement gyro turn
+                        ((int) (robot.getRotation()-AutonPlanner.getStartingRotation()) * -10), speed); // TODO Implement gyro turn
             default:
                 return "// !----- Failed to generate turn code here -----!";
         }
