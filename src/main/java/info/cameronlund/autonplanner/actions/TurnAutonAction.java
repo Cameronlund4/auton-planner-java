@@ -152,7 +152,9 @@ public class TurnAutonAction extends AutonAction {
                 return String.format("pidDrivePoint(%d * sideMult); // " + getWrapper().getActionName(), (int) (angleDelta * 5.21566151f));
             case "action1":
 
-                if(speed < 0)
+                speed = Math.abs(speed);
+
+                if(angleDelta < 0)
                     if(angleDelta > -180)
                         speed *= -1;
                 else if(angleDelta > 180){
