@@ -186,7 +186,7 @@ public class ClawAutonAction extends AutonAction {
     }
 
     @Override
-    public String renderCode() {
+    public String renderCode(info.cameronlund.autonplanner.robot.Robot robot) {
         switch (action) {
             case "action1":
                 return String.format("setClaw(%d,%d); // " + getWrapper().getActionName(), (int) angleTarget, speed);

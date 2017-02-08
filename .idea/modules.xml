@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Auton Planner.iml" filepath="$PROJECT_DIR$/Auton Planner.iml" />
+      <module fileurl="file://$PROJECT_DIR$/auton-planner.iml" filepath="$PROJECT_DIR$/auton-planner.iml" />
     </modules>
   </component>
 </project>

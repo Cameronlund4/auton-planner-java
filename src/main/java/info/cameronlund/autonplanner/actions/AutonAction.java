@@ -52,7 +52,7 @@ public abstract class AutonAction {
         this.color = color;
     }
 
-    public abstract String renderCode();
+    public abstract String renderCode(Robot robot);
 
     public abstract void loadJson(JsonObject object);
 
