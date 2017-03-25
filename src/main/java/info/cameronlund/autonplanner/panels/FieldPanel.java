@@ -20,52 +20,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 
-public class FieldPanel extends JPanel {
-    private BufferedImage fieldImage;
-    private Star[] stars = new Star[24];
-    private Cube[] cubes = new Cube[4];
-    private NearZone nearZone;
-    private FarZone farZone;
-    private Robot robot = new Robot();
+public abstract class FieldPanel extends JPanel {
+    protected Robot robot = new Robot();
     private ActionManager manager;
     private ArrayList<GameObject> scored = new ArrayList<>();
 
-    public FieldPanel(String fieldPath, String cubePath, String starPath) {
+    public FieldPanel() {
         // Set up our graphics
         setPreferredSize(new Dimension(687, 687));
         new Test(this);
-
-        // Set up the images we need
-        try {
-            fieldImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream(fieldPath));
-            Cube.initializeImage(ImageIO.read(getClass().getClassLoader().getResourceAsStream(cubePath)));
-            Star.initializeImage(ImageIO.read(getClass().getClassLoader().getResourceAsStream(starPath)));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        // Initialize stars 1-24
-        for (int i = 0; i < 24; i++)
-            stars[i] = new Star(i + 1);
-
-        // initialize cubes 1-4
-        for (int i = 0; i < 4; i++)
-            cubes[i] = new Cube(i + 1);
-
-        // To save this classes beauty, use a helper for setting positions
-        FieldPositionHelper.setStarPositions(stars);
-        FieldPositionHelper.setCubePositions(cubes);
-
-        nearZone = new NearZone();
-        farZone = new FarZone();
-    }
-
-    public Star getStar(int id) {
-        return stars[id - 1];
-    }
-
-    public Cube getCube(int id) {
-        return cubes[id - 1];
     }
 
     // Essentially an alias, improves readability
@@ -75,47 +38,19 @@ public class FieldPanel extends JPanel {
 
     public void paintComponent(Graphics g) {
         reset(); // Reset everything
-
-        // If preload should be loaded, load it
-        if (AutonPlanner.isPreloadLoaded())
-            loadToRobot(getStar(1));
-
-        // Set the robot starting stuff
-        robot.setRotation(AutonPlanner.getStartingRotation());
-        // TODO: Render all the actions
-
-        // Ensure the field image exists
-        if (fieldImage == null)
-            return;
-        // Draw the field
-        g.drawImage(fieldImage, 0, 0, this);
-
-        // Draw whatever actions we want
-        manager.paint(g, robot);
-
-        // Draw all the stars
-        for (GameObject star : stars)
-            star.draw(this, g);
-
-        // Draw all the cubes
-        for (GameObject cube : cubes)
-            cube.draw(this, g);
-
-        nearZone.paint(this, g);
-        farZone.paint(this, g);
-
+        paintField(g);
         robot.paint(g);
     }
 
-    public void reset() {
-        robot.returnToResting();
+    public abstract void paintField(Graphics g);
+
+    private void reset() {
         robot.getInventory().clear();
         scored = new ArrayList<>();
-        nearZone.clear();
-        farZone.clear();
-        FieldPositionHelper.setStarPositions(stars);
-        FieldPositionHelper.setCubePositions(cubes);
+        resetField();
     }
+
+    public abstract void resetField();
 
     public void loadToRobot(GameObject object) {
         robot.getInventory().scoreGameObject(object);
@@ -131,7 +66,7 @@ public class FieldPanel extends JPanel {
     }
 
     public class Test {
-        public Test(FieldPanel panel) {
+        Test(FieldPanel panel) {
             new FieldClickListener(panel) {
                 @Override
                 public void fieldClicked(int x, int y, int button) {
@@ -145,6 +80,11 @@ public class FieldPanel extends JPanel {
                     double lineRot = Math.atan((double) (y1 - y) / (double) (x1 - x)) + (Math.PI / 2);
                     if (x1 > x)
                         lineRot += Math.PI;
+                    while (Math.abs(lineRot) > Math.PI) {
+                        double lineRotTemp = lineRot;
+                        lineRot = (lineRot - 2*Math.PI);
+                        System.out.println("Math.PI: "+Math.PI+" Input: " + lineRotTemp + " Output: " + lineRot);
+                    }
                     System.out.println("Line rot: " + lineRot + "," + Math.toDegrees(lineRot));
                     int distance = (int) (Math.sqrt(Math.pow(y - y1, 2) + Math.pow(x - x1, 2)) / 2) * 24;
 
@@ -169,5 +109,9 @@ public class FieldPanel extends JPanel {
 
             };
         }
+    }
+
+    protected ActionManager getManager() {
+        return manager;
     }
 }

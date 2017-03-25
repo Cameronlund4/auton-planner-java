@@ -8,15 +8,13 @@ import info.cameronlund.autonplanner.filters.AutonPlanerFileFilter;
 import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
 import info.cameronlund.autonplanner.panels.FieldPanel;
-
+import info.cameronlund.autonplanner.panels.StarstruckFieldPanel;
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -56,7 +54,7 @@ public class AutonPlanner {
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
         // Load the field image, scaled 3 pixels -> 1 tick
-        fieldPanel = new FieldPanel("scale_field(2-1).png",
+        fieldPanel = new StarstruckFieldPanel("scale_field(2-1).png",
                 "cube.png", "star.png");
         fieldPanel.setManager(manager);
 
@@ -272,7 +270,7 @@ public class AutonPlanner {
 
         JMenuItem saveMenuItem = new JMenuItem("Save");
         JMenuItem saveAsMenuItem = new JMenuItem("Save as");
-        
+
         saveAsMenuItem.setActionCommand("Save as");
         saveAsMenuItem.addActionListener(l -> {
             System.out.println("Pressed save as");
@@ -304,10 +302,41 @@ public class AutonPlanner {
             }
 
         });
+
+        JMenu prosMenu = new JMenu("PROS");
+
+        JMenuItem makeFlashMenuItem = new JMenuItem("Make & Flash");
+        makeFlashMenuItem.setActionCommand("Make & Flash");
+        makeFlashMenuItem.addActionListener(l -> {
+            System.out.println("Pressed make & flash");
+            try {
+                String line;
+                System.out.println("runas /profile /user:Administrator \"D: && cd " +
+                        "'D:\\Google Drive\\Computer Drive\\Robotics\\2616E\\Starstruck\\pros_beta'" +
+                        " && pros make\"");
+                Process p = Runtime.getRuntime().exec("pros mu 'D:\\Google Drive\\Computer Drive\\Robotics\\2616E\\Starstruck\\pros_beta'");
+                BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                System.out.println(p.isAlive());
+                while (p.isAlive());
+                while ((line = input.readLine()) != null) {
+                    System.out.println(line);
+                }
+                System.out.println(p.isAlive());
+                input.close();
+            } catch (IOException e) {
+                // TODO Notify user
+                e.printStackTrace();
+            }
+
+        });
+
+
+        prosMenu.add(makeFlashMenuItem);
         fileMenu.add(saveMenuItem);
         fileMenu.add(saveAsMenuItem);
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
+        menuBar.add(prosMenu);
         // End menu creation ---------
 
         // Add our content to the frame
@@ -363,9 +392,9 @@ public class AutonPlanner {
         manager.loadJson(object.get("actions").getAsJsonArray());
         startingRotation = object.get("startRot").getAsInt();
         angleField.setText(startingRotation + "");
-        offsetField.setText(object.get("startX").getAsInt() + "," + -1 *object.get("startY").getAsInt());
+        offsetField.setText(object.get("startX").getAsInt() + "," + -1 * object.get("startY").getAsInt());
         fieldPanel.getRobot().setResting(515 + object.get("startX").getAsInt(),
-                 630 + object.get("startY").getAsInt());
+                630 + object.get("startY").getAsInt());
         // TODO Load skills and preloaded state
     }
 
