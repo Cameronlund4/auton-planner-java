@@ -126,8 +126,8 @@ public class TurnAutonAction extends AutonAction {
 
     @Override
     public Robot renderWithGraphics(Robot robot, Graphics g) {
-        int x = robot.getPosX();
-        int y = robot.getPosY();
+        int x = (int) robot.getPosX();
+        int y = (int) robot.getPosY();
         float rotation = robot.getRotation();
         robot = renderWithoutGraphics(robot);
         g.setColor(getColor());

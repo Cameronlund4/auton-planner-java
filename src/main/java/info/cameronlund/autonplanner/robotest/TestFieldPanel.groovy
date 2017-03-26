@@ -43,7 +43,7 @@ class TestFieldPanel extends FieldPanel {
 
     void test(TestRobot r) {
         while (r.getPosY() > 50) {
-            //points.add(new DPoint(r.posX + r.ghostX, r.posY + r.ghostY)); // TODO Remove
+            ppoints.add(new DPoint(r.posX + r.ghostX, r.posY + r.ghostY)); // TODO Remove
             // Move robot 1 pixel
             r.movePixels(1)
             repaint()
@@ -58,9 +58,9 @@ class TestFieldPanel extends FieldPanel {
                             r.getGhostY())
                     // Get the b of the line that is perp to l and intersects rPoint
                     println "Line: m(" + l.getSlope() + ")x+b(" + l.getyIntercept() + ")"
-                    def b = (-1 * l.perpSlope * rPoint.x) + (rPoint.y)
+                    double b = (-1 * l.perpSlope * rPoint.x) + (rPoint.y)
                     // Find the point on the line that this perp hits
-                    def point = l.getPoint(getIntersectY(l, l.perpSlope, b));
+                    def point = l.getPointY(getIntersectY(l, l.perpSlope, b)); // a
                     println "Perp: m(" + l.getPerpSlope() + ")x+b(" + b + ")"
                     if (Math.abs(point.getDistance(rPoint)) > 1)
                         r.moveGhost(getAngle(point, rPoint), point.getDistance(rPoint))
@@ -77,7 +77,7 @@ class TestFieldPanel extends FieldPanel {
     }
 
     // Returns y value of intersection of two lines
-    private int getIntersectY(Line l1, slope2, b2) {
+    private double getIntersectY(Line l1, slope2, b2) {
         double ratio = (l1.getSlope() / slope2);
         return ((l1.getyIntercept() - (ratio * b2)) / (1 - ratio));
     }
@@ -94,29 +94,29 @@ class TestFieldPanel extends FieldPanel {
 }
 
 class Line {
-    int startX
-    int endX
-    int startY
-    int endY
-    int detectionRadius
+    double startX
+    double endX
+    double startY
+    double endY
+    double detectionRadius
     double yIntercept
     double slope
 
-    Line(int startX, int startY, int endX, int endY, int detectionRadius) {
+    Line(double startX, double startY, double endX, double endY, double detectionRadius) {
         this.startX = startX
         this.endX = endX
         this.startY = startY
         this.endY = endY
         this.detectionRadius = detectionRadius
-        slope = (endY - startY) / (endX - startX) // Find slope
-        yIntercept = (startY - slope * startX) // Find y-intercept
+        slope = (double) (endY - startY) / (double)(endX - startX) // Find slope
+        yIntercept = (double) (startY - slope * (double) startX) // Find y-intercept
     }
 
     void paintLine(Graphics g) {
         Graphics2D g2 = g as Graphics2D
         g2.setColor(Color.white)
         g2.setStroke(new BasicStroke(4))
-        g2.drawLine(startX, startY, endX, endY)
+        g2.drawLine(startX as int, startY as int, endX as int, endY as int)
     }
 
     double getSlope() {
@@ -133,7 +133,7 @@ class Line {
     }
 
     DPoint getPointY(double y) {
-        x = (y - yIntercept) / slope
+        double x = (y - yIntercept) / slope as double
         return new DPoint(x, y)
     }
 }

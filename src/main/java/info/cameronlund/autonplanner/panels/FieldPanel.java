@@ -71,8 +71,8 @@ public abstract class FieldPanel extends JPanel {
                 @Override
                 public void fieldClicked(int x, int y, int button) {
                     // Get all the info we need
-                    int x1 = robot.getPosX();
-                    int y1 = robot.getPosY();
+                    int x1 = (int) robot.getPosX();
+                    int y1 = (int) robot.getPosY();
                     System.out.println("X: " + x + " Y: " + y + " X1: " + x1 + " Y1: " + y1);
 
                     double robotRot = Math.toRadians(robot.getRotation());

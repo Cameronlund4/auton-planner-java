@@ -6,8 +6,8 @@ import java.awt.*
 import java.util.List
 
 class TestRobot extends Robot {
-    int ghostX
-    int ghostY
+    double ghostX
+    double ghostY
     List lines
     List lineSensors = [new DPoint(-37, -37), new DPoint(-37, 37),
                         new DPoint(37, -37), new DPoint(37, 37)]
@@ -17,8 +17,8 @@ class TestRobot extends Robot {
         setResting(400, 515)
         returnToResting()
         def rand = new Random()
-        ghostX = 75//rand.nextInt(25) + 50
-        ghostY = 50//rand.nextInt(25) + 50
+        ghostX = rand.nextInt(100) - 50
+        ghostY = rand.nextInt(100) - 50
     }
 
     void paint(Graphics g) {
@@ -48,9 +48,9 @@ class TestRobot extends Robot {
 
         // Draw ghost position
         g2.setColor(Color.YELLOW)
-        bot = new Rectangle((int) getPosX() + ghostX - 41, (int) getPosY() + ghostY - 41, 82, 82)
-        posMarkerL = new Rectangle((int) getPosX() + ghostX - 41, (int) getPosY() + ghostY - 41, 10, 10)
-        posMarkerR = new Rectangle((int) getPosX() + ghostX + 31, (int) getPosY() + ghostY - 41, 10, 10)
+        bot = new Rectangle((int) (getPosX() + ghostX - 41), (int) (getPosY() + ghostY - 41), 82, 82)
+        posMarkerL = new Rectangle((int) (getPosX() + ghostX - 41), (int) (getPosY() + ghostY - 41), 10, 10)
+        posMarkerR = new Rectangle((int) (getPosX() + ghostX + 31), (int) (getPosY() + ghostY - 41), 10, 10)
 
         if (rotation != 0.0)
             g2.rotate(Math.toRadians(getRotation()), getPosX() + ghostX, getPosY() + ghostY)
@@ -67,7 +67,7 @@ class TestRobot extends Robot {
         boolean isOnLine = false
         for (def l : getLines()) {
             def li = l as Line
-            def y = li.getPoint(getPosX() + sensor.x).y
+            double y = li.getPoint(getPosX() + sensor.x).y
             if (Math.abs(y - (sensor.y + getPosY())) <= li.getDetectionRadius()) isOnLine = true
         }
         return isOnLine
@@ -77,7 +77,7 @@ class TestRobot extends Robot {
         def sensor = lineSensors.get(i) as DPoint
         for (def l : getLines()) {
             def li = l as Line
-            def y = li.getPoint(getPosX() + sensor.x).y
+            double y = li.getPoint(getPosX() + sensor.x).y
             if (Math.abs(y - (sensor.y + getPosY())) <= li.getDetectionRadius()) return li
         }
         return null

@@ -10,8 +10,8 @@ public class Robot {
     private int restingX = 515;
     private int restingY = 630;
     private int restingRotation = 0;
-    private float posX = restingX;
-    private float posY = restingY;
+    private double posX = restingX;
+    private double posY = restingY;
     private RobotInventory inventory = new RobotInventory(this);
 
     public void setResting(int restingX, int restingY) {
@@ -30,7 +30,7 @@ public class Robot {
         rotation = restingRotation;
     }
 
-    public void setPosition(int posX, int posY) {
+    public void setPosition(double posX, double posY) {
         this.posX = posX;
         this.posY = posY;
     }
@@ -56,7 +56,7 @@ public class Robot {
         rotation += right ? ticks / 10 : ticks / 10 * -1;
     }
 
-    public void movePixels(int pixelDistance) {
+    public void movePixels(double pixelDistance) {
         // - (Math.PI / 2) is to make 0 up
         posX += Math.cos(Math.toRadians(rotation) - (Math.PI / 2)) * pixelDistance;
         posY += Math.sin(Math.toRadians(rotation) - (Math.PI / 2)) * pixelDistance;
@@ -65,7 +65,7 @@ public class Robot {
     public void moveTicks(int ticks) {
         // Pixels = (ticks/12)*2, it's ticks/12 cause I did the math for pixels in inches, not feet (Whoops)
         // movePixels((int) ((double) ticks / 12) * 2); // This is direct drive. Below is geared 1:2
-        movePixels((int) ((double) ticks / 12));
+        movePixels(((double) ticks / 12));
     }
 
     public void paint(Graphics g) {
@@ -105,12 +105,12 @@ public class Robot {
         inventory.transferObjects(zone);
     }
 
-    public int getPosX() {
-        return (int) posX;
+    public double getPosX() {
+        return posX;
     }
 
-    public int getPosY() {
-        return (int) posY;
+    public double getPosY() {
+        return posY;
     }
 
     public int getRestingX() {

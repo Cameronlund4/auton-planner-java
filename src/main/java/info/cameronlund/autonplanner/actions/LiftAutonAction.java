@@ -97,7 +97,7 @@ public class LiftAutonAction extends AutonAction {
         g.setColor(getColor());
         Graphics2D g2 = (Graphics2D) g;
         g2.setFont(new Font("default", Font.BOLD, 14));
-        g2.drawString("L", robot.getPosX() - 6, robot.getPosY() + 5);
+        g2.drawString("L", (int) robot.getPosX() - 6, (int) robot.getPosY() + 5);
         return renderWithoutGraphics(robot);
     }
 

@@ -60,15 +60,15 @@ public class DriveAutonAction extends AutonAction {
 
     @Override
     public Robot renderWithGraphics(Robot robot, Graphics g) {
-        int x = robot.getPosX();
-        int y = robot.getPosY();
+        int x = (int) robot.getPosX();
+        int y = (int) robot.getPosY();
         robot = renderWithoutGraphics(robot);
         Graphics2D g2 = (Graphics2D) g;
         g2.setColor(getColor());
         g2.setStroke(new BasicStroke(3));
-        g2.drawLine(x, y, robot.getPosX(), robot.getPosY());
+        g2.drawLine(x, y, (int) robot.getPosX(), (int) robot.getPosY());
         g2.setColor(Color.BLACK);
-        g2.fillOval(robot.getPosX() - 4, robot.getPosY() - 4, 8, 8);
+        g2.fillOval((int) robot.getPosX() - 4, (int) robot.getPosY() - 4, 8, 8);
         return robot;
     }
 

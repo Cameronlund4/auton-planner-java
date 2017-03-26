@@ -29,8 +29,8 @@ public class RobotInventory extends ScoringZone {
             if (object instanceof Cube)
                 cubeCount += 1;
         }
-        int posX = robot.getPosX();
-        int posY = robot.getPosY();
+        int posX = (int) robot.getPosX();
+        int posY = (int) robot.getPosY();
 
         g2.setFont(new Font("default", Font.PLAIN, 12));
         g2.drawString("Stars: " + starCount, posX - 38, posY + 26);
