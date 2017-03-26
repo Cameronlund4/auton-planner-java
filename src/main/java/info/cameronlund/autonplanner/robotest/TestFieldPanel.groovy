@@ -34,19 +34,33 @@ class TestFieldPanel extends FieldPanel {
     void test(TestRobot r) {
         while (r.getPosY() > 50) {
             // Move robot 1 pixel
-            r.movePixels(1);
-            repaint();
+            r.movePixels(1)
+            repaint()
             for (int i = 0; i < 3; i++) {
                 if (r.isOnLine(i)) {
-                    Line l = r.getOnLine(i);
-                    def sPoint = r.getLineSensors().get(i);
-                    def rPoint = new DPoint(sPoint.x + r.getPosX(), sPoint.y + r.getPosY())
-                    r.moveGhost(Math.atan(l.getPerpSlope()), l.getPoint(rPoint.x).getDistance(rPoint));
-                    break;
+                    // Get the line we are on
+                    Line l = r.getOnLine(i)
+                    // Get the line sensor that hit's robot offset
+                    def sPoint = r.getLineSensors().get(i)
+                    // Get the pos of that line sensor on the ghost
+                    def rPoint = new DPoint(sPoint.x + r.getPosX() + r.getGhostX(), sPoint.y + r.getPosY() +
+                            r.getGhostX())
+                    // Get the b of the line that is perp to l and intersects rPoint
+                    def b = (-1 * l.perpSlope * rPoint.x) + (rPoint.y)
+                    // Find the point on the line that this perp hits
+                    def point = l.getPoint(getIntersectY(l,l.perpSlope,b));
+                    r.moveGhost(Math.atan2(l.getPerpSlope(),point.x), l.getPoint(point.x).getDistance(rPoint))
+                    break
                 }
             }
             sleep(100)
         }
+    }
+
+    // Returns y value of intersection of two lines
+    private int getIntersectY(Line l1, slope2, b2) {
+        double ratio = (l1.getSlope()/slope2);
+        return ((l1.getyIntercept() - (ratio * b2)) / (1-ratio));
     }
 }
 
@@ -57,7 +71,7 @@ class Line {
     int endY
     int detectionRadius
     double yIntercept
-    double slope;
+    double slope
 
     Line(int startX, int startY, int endX, int endY, int detectionRadius) {
         this.startX = startX
@@ -65,8 +79,8 @@ class Line {
         this.startY = startY
         this.endY = endY
         this.detectionRadius = detectionRadius
-        slope = (endY - startY) / (endX - startX); // Find slope
-        yIntercept = (startY - slope * startX); // Find y-intercept
+        slope = (endY - startY) / (endX - startX) // Find slope
+        yIntercept = (startY - slope * startX) // Find y-intercept
     }
 
     void paintLine(Graphics g) {
@@ -77,29 +91,34 @@ class Line {
     }
 
     double getSlope() {
-        return slope;
+        return slope
     }
 
     double getPerpSlope() {
-        return 1 / slope * -1;
+        return 1 / slope * -1
     }
 
     DPoint getPoint(double x) {
-        double y = slope * x + yIntercept;
-        return new DPoint(x, y);
+        double y = slope * x + yIntercept
+        return new DPoint(x, y)
+    }
+
+    DPoint getPointY(double y) {
+        x = (y-yIntercept)/slope
+        return new DPoint(x, y)
     }
 }
 
-public class DPoint {
-    public final double x, y;
+class DPoint {
+    public final double x, y
 
     DPoint(double x, double y) {
-        this.x = x;
-        this.y = y;
+        this.x = x
+        this.y = y
     }
 
     double deltaX(DPoint point) {
-        return x - point.x;
+        return x - point.x
     }
 
     double deltaY(DPoint point) {
@@ -107,6 +126,6 @@ public class DPoint {
     }
 
     double getDistance(DPoint point) {
-        return Math.sqrt(Math.pow((y - point.y), 2) + Math.pow((x - point.x), 2));
+        return Math.sqrt(Math.pow((y - point.y), 2) + Math.pow((x - point.x), 2))
     }
 }
