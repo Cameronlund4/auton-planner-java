@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage
 
 class TestFieldPanel extends FieldPanel {
     private BufferedImage fieldImage
-    def lines = [new Line(0, 0, 687, 687, 5), new Line(0, 575, 575, 0, 5)]
+    def lines = [new Line(0, 0, 687, 687, 1), new Line(0, 575, 575, 0, 1)]
     def points = [];
 
     TestFieldPanel() {
@@ -36,7 +36,7 @@ class TestFieldPanel extends FieldPanel {
 
     void test(TestRobot r) {
         while (r.getPosY() > 50) {
-            points.add(new DPoint(r.posX + r.ghostX, r.posY + r.ghostY));
+            //points.add(new DPoint(r.posX + r.ghostX, r.posY + r.ghostY)); // TODO Remove
             // Move robot 1 pixel
             r.movePixels(1)
             repaint()
@@ -48,13 +48,15 @@ class TestFieldPanel extends FieldPanel {
                     def sPoint = r.getLineSensors().get(i)
                     // Get the pos of that line sensor on the ghost
                     def rPoint = new DPoint(sPoint.x + r.getPosX() + r.getGhostX(), sPoint.y + r.getPosY() +
-                            r.getGhostX())
+                            r.getGhostY())
                     // Get the b of the line that is perp to l and intersects rPoint
                     def b = (-1 * l.perpSlope * rPoint.x) + (rPoint.y)
                     // Find the point on the line that this perp hits
                     def point = l.getPoint(getIntersectY(l, l.perpSlope, b));
-                    if (Math.abs(l.getPoint(point.x).getDistance(rPoint)) > 2)
-                        r.moveGhost(Math.atan(l.getPerpSlope()), l.getPoint(point.x).getDistance(rPoint))
+                    if (Math.abs(l.getPoint(point.x).getDistance(rPoint)) > 1)
+                        r.moveGhost(Math.atan(l.getPerpSlope())+Math.PI, point.getDistance(rPoint))
+                    println point.toString() + " " + rPoint.toString() + " " + point.getDistance(rPoint)
+                    points.add(rPoint); // TODO Remove
                     break
                 }
             }
@@ -132,5 +134,9 @@ class DPoint {
 
     double getDistance(DPoint point) {
         return Math.sqrt(Math.pow((y - point.y), 2) + Math.pow((x - point.x), 2))
+    }
+
+    String toString() {
+        return "[X: " + x + " Y: " + y + "]";
     }
 }

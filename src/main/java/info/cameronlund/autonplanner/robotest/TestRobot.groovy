@@ -17,8 +17,8 @@ class TestRobot extends Robot {
         setResting(400, 515)
         returnToResting()
         def rand = new Random()
-        ghostX = rand.nextInt(25) + 50
-        ghostY = rand.nextInt(25) + 50
+        ghostX = 75//rand.nextInt(25) + 50
+        ghostY = 50//rand.nextInt(25) + 50
     }
 
     void paint(Graphics g) {
@@ -84,7 +84,7 @@ class TestRobot extends Robot {
     }
 
     void moveGhost(angle, distance) {
-        ghostX += Math.cos(angle+Math.PI) * distance; //  - (Math.PI / 2)
-        ghostY += Math.sin(angle+Math.PI) * distance;
+        ghostX += Math.cos(angle) * distance; //  - (Math.PI / 2)
+        ghostY += Math.sin(angle) * distance;
     }
 }
