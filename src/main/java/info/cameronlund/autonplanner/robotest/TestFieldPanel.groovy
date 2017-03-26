@@ -9,6 +9,7 @@ import java.awt.image.BufferedImage
 class TestFieldPanel extends FieldPanel {
     private BufferedImage fieldImage
     def lines = [new Line(0, 0, 687, 687, 5), new Line(0, 575, 575, 0, 5)]
+    def points = [];
 
     TestFieldPanel() {
         super.robot = new TestRobot(lines)
@@ -24,6 +25,8 @@ class TestFieldPanel extends FieldPanel {
     void paintField(Graphics g) {
         g.drawImage(fieldImage, 0, 0, this)
         lines.each { it.paintLine(g) }
+        g.setColor(Color.blue)
+        points.each { int x = it.x; int y = it.y; g.drawOval(x,y,3,3);}
     }
 
     @Override
@@ -33,6 +36,7 @@ class TestFieldPanel extends FieldPanel {
 
     void test(TestRobot r) {
         while (r.getPosY() > 50) {
+            points.add(new DPoint(r.posX+r.ghostX, r.posY+r.ghostY));
             // Move robot 1 pixel
             r.movePixels(1)
             repaint()
