@@ -10,6 +10,8 @@ class TestFieldPanel extends FieldPanel {
     private BufferedImage fieldImage
     def lines = [new Line(0, 0, 687, 687, 1), new Line(0, 575, 575, 0, 1)]
     def points = [];
+    def ypoints = [];
+    def ppoints = [];
 
     TestFieldPanel() {
         super.robot = new TestRobot(lines)
@@ -27,6 +29,11 @@ class TestFieldPanel extends FieldPanel {
         lines.each { it.paintLine(g) }
         g.setColor(Color.blue)
         points.each { int x = it.x; int y = it.y; g.drawOval(x, y, 3, 3); }
+        g.setColor(Color.yellow)
+        ypoints.each { int x = it.x; int y = it.y; g.drawOval(x, y, 3, 3); }
+        g.setColor(Color.magenta)
+        ppoints.each { int x = it.x; int y = it.y; g.drawOval(x, y, 3, 3); }
+
     }
 
     @Override
@@ -50,13 +57,18 @@ class TestFieldPanel extends FieldPanel {
                     def rPoint = new DPoint(sPoint.x + r.getPosX() + r.getGhostX(), sPoint.y + r.getPosY() +
                             r.getGhostY())
                     // Get the b of the line that is perp to l and intersects rPoint
+                    println "Line: m(" + l.getSlope() + ")x+b(" + l.getyIntercept() + ")"
                     def b = (-1 * l.perpSlope * rPoint.x) + (rPoint.y)
                     // Find the point on the line that this perp hits
                     def point = l.getPoint(getIntersectY(l, l.perpSlope, b));
-                    if (Math.abs(l.getPoint(point.x).getDistance(rPoint)) > 1)
-                        r.moveGhost(Math.atan(l.getPerpSlope())+Math.PI, point.getDistance(rPoint))
-                    println point.toString() + " " + rPoint.toString() + " " + point.getDistance(rPoint)
-                    points.add(rPoint); // TODO Remove
+                    println "Perp: m(" + l.getPerpSlope() + ")x+b(" + b + ")"
+                    if (Math.abs(point.getDistance(rPoint)) > 1)
+                        r.moveGhost(getAngle(point, rPoint), point.getDistance(rPoint))
+                    println point.toString() + " " + rPoint.toString() + " " + point.getDistance(rPoint) + " " + getAngle(point, rPoint)
+                    println l.slope + " " + l.perpSlope
+                    points.add(point); // TODO Remove
+                    ypoints.add(rPoint); // TODO Remove
+                    println("------------------");
                     break
                 }
             }
@@ -68,6 +80,16 @@ class TestFieldPanel extends FieldPanel {
     private int getIntersectY(Line l1, slope2, b2) {
         double ratio = (l1.getSlope() / slope2);
         return ((l1.getyIntercept() - (ratio * b2)) / (1 - ratio));
+    }
+
+    double getAngle(DPoint one, DPoint two) {
+        double angle = Math.atan2(one.y - two.y, one.x - two.x);
+
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        return angle;
     }
 }
 
