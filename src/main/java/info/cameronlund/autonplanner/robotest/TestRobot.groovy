@@ -84,7 +84,7 @@ class TestRobot extends Robot {
     }
 
     void moveGhost(angle, distance) {
-        ghostX += Math.cos(Math.toRadians(angle) - (Math.PI / 2)) * distance;
-        ghostY += Math.sin(Math.toRadians(angle) - (Math.PI / 2)) * distance;
+        ghostX += Math.cos(angle+Math.PI) * distance; //  - (Math.PI / 2)
+        ghostY += Math.sin(angle+Math.PI) * distance;
     }
 }

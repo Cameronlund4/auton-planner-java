@@ -26,7 +26,7 @@ class TestFieldPanel extends FieldPanel {
         g.drawImage(fieldImage, 0, 0, this)
         lines.each { it.paintLine(g) }
         g.setColor(Color.blue)
-        points.each { int x = it.x; int y = it.y; g.drawOval(x,y,3,3);}
+        points.each { int x = it.x; int y = it.y; g.drawOval(x, y, 3, 3); }
     }
 
     @Override
@@ -36,7 +36,7 @@ class TestFieldPanel extends FieldPanel {
 
     void test(TestRobot r) {
         while (r.getPosY() > 50) {
-            points.add(new DPoint(r.posX+r.ghostX, r.posY+r.ghostY));
+            points.add(new DPoint(r.posX + r.ghostX, r.posY + r.ghostY));
             // Move robot 1 pixel
             r.movePixels(1)
             repaint()
@@ -52,8 +52,9 @@ class TestFieldPanel extends FieldPanel {
                     // Get the b of the line that is perp to l and intersects rPoint
                     def b = (-1 * l.perpSlope * rPoint.x) + (rPoint.y)
                     // Find the point on the line that this perp hits
-                    def point = l.getPoint(getIntersectY(l,l.perpSlope,b));
-                    r.moveGhost(Math.atan2(l.getPerpSlope(),point.x), l.getPoint(point.x).getDistance(rPoint))
+                    def point = l.getPoint(getIntersectY(l, l.perpSlope, b));
+                    if (Math.abs(l.getPoint(point.x).getDistance(rPoint)) > 2)
+                        r.moveGhost(Math.atan(l.getPerpSlope()), l.getPoint(point.x).getDistance(rPoint))
                     break
                 }
             }
@@ -63,8 +64,8 @@ class TestFieldPanel extends FieldPanel {
 
     // Returns y value of intersection of two lines
     private int getIntersectY(Line l1, slope2, b2) {
-        double ratio = (l1.getSlope()/slope2);
-        return ((l1.getyIntercept() - (ratio * b2)) / (1-ratio));
+        double ratio = (l1.getSlope() / slope2);
+        return ((l1.getyIntercept() - (ratio * b2)) / (1 - ratio));
     }
 }
 
@@ -108,7 +109,7 @@ class Line {
     }
 
     DPoint getPointY(double y) {
-        x = (y-yIntercept)/slope
+        x = (y - yIntercept) / slope
         return new DPoint(x, y)
     }
 }
