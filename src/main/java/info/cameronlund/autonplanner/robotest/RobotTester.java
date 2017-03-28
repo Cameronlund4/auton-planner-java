@@ -63,6 +63,7 @@ public class RobotTester {
         frame.pack();
         frame.setVisible(true);
 
-        ((TestFieldPanel) fieldPanel).test((TestRobot) fieldPanel.getRobot());
+        new Thread(new SensorAlignCode((ProsTestRobot) fieldPanel.getRobot())).start();
+        ((TestFieldPanel) fieldPanel).test((ProsTestRobot) fieldPanel.getRobot());
     }
 }

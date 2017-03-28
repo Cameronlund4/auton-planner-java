@@ -14,7 +14,8 @@ class TestRobot extends Robot {
 
     TestRobot(List lines) {
         this.lines = lines
-        setResting(400, 515)
+        //setResting(300, 515)
+        setResting(300, 400)
         returnToResting()
     }
 
@@ -64,20 +65,41 @@ class TestRobot extends Robot {
         boolean isOnLine = false
         for (def l : getLines()) {
             def li = l as Line
-            double y = li.getPoint(getPosX() + sensor.x).y
-            if (Math.abs(y - (sensor.y + getPosY())) <= li.getDetectionRadius()) isOnLine = true
+            DPoint pos = getPos();
+            DPoint sPos = new DPoint(pos.x+sensor.x, pos.y+sensor.y);
+            DPoint posRot = rotate(sPos,pos,rotation)
+            double y = li.getPoint(posRot.x).y
+            if (Math.abs(y - posRot.y) <= li.getDetectionRadius()) isOnLine = true
         }
         return isOnLine
+    }
+
+    DPoint getPos() {
+        return new DPoint(posX,posY);
     }
 
     Line getOnLine(int i) {
         def sensor = lineSensors.get(i) as DPoint
         for (def l : getLines()) {
             def li = l as Line
-            double y = li.getPoint(getPosX() + sensor.x).y
-            if (Math.abs(y - (sensor.y + getPosY())) <= li.getDetectionRadius()) return li
+            DPoint pos = getPos();
+            DPoint sPos = new DPoint(pos.x+sensor.x, pos.y+sensor.y);
+            DPoint posRot = rotate(sPos,pos,rotation)
+            double y = li.getPoint(posRot.x).y
+            if (Math.abs(y - posRot.y) <= li.getDetectionRadius()) return li
         }
         return null
+    }
+
+    DPoint rotate(DPoint point, DPoint center, double degrees) {
+        double radians = Math.toRadians(degrees);
+        double x1 = point.x - center.x;
+        double y1 = point.y - center.y;
+
+        double x2 = x1 * Math.cos(radians) - y1 * Math.sin(radians);
+        double y2 = x1 * Math.sin(radians) + y1 * Math.cos(radians);
+
+        new DPoint(x2 + center.x,y2 + center.y)
     }
 
     void moveGhost(angle, distance) {
@@ -87,8 +109,7 @@ class TestRobot extends Robot {
 
     public void returnToResting() {
         super.returnToResting();
-        def rand = new Random()
-        ghostX = rand.nextInt(100) - 50
-        ghostY = rand.nextInt(100) - 50
+
+        //setRotation(rand.nextInt(44))
     }
 }

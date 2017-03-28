@@ -14,7 +14,7 @@ class TestFieldPanel extends FieldPanel {
     def ppoints = [];
 
     TestFieldPanel() {
-        super.robot = new TestRobot(lines)
+        super.robot = new ProsTestRobot(lines)
         // Set up the images we need
         try {
             fieldImage = ImageIO.read(getClass().getClassLoader().getResourceAsStream("test_field.png"))
@@ -41,36 +41,45 @@ class TestFieldPanel extends FieldPanel {
 
     }
 
-    void test(TestRobot r) {
+    void test(ProsTestRobot r) {
         while (true) {
-            while (r.getPosY() > 50) {
+            println r.getPos()
+            while (r.getPosY() > 0 && r.getPosY() < 687 && r.getPosY() < 687 && r.getPosX() < 687) { // 50
                 // Move robot 1 pixel
-                r.movePixels(1)
+                r.drive(127,false);
                 repaint()
                 for (int i = 0; i < 3; i++) {
                     if (r.isOnLine(i)) {
                         // Get the line we are on
                         Line l = r.getOnLine(i)
                         // Get the line sensor that hit's robot offset
-                        def sPoint = r.getLineSensors().get(i)
+                        def sensor = r.getLineSensors().get(i)
+                        DPoint gPos = new DPoint(r.getPosX()+r.ghostX,r.getPosY()+r.ghostY)
+                        DPoint sPos = new DPoint(gPos.x+sensor.x, gPos.y+sensor.y);
+                        DPoint posRot = r.rotate(sPos,gPos,r.rotation)
                         // Get the pos of that line sensor on the ghost
-                        def rPoint = new DPoint(sPoint.x + r.getPosX() + r.getGhostX(), sPoint.y + r.getPosY() +
-                                r.getGhostY())
+                        //def rPoint = new DPoint(sPoint.x + r.getPosX() + r.getGhostX(), sPoint.y + r.getPosY() +
+                        //        r.getGhostY())
                         // Get the b of the line that is perp to l and intersects rPoint
-                        double b = (-1 * l.perpSlope * rPoint.x) + (rPoint.y)
+                        double b = (-1 * l.perpSlope * posRot.x) + (posRot.y)
                         // Find the point on the line that this perp hits
                         def point = l.getPointY(getIntersectY(l, l.perpSlope, b))
-                        if (Math.abs(point.getDistance(rPoint)) > 1) {
-                            r.ghostX = point.x - r.getPosX() - sPoint.x;
-                            r.ghostY = point.y - r.getPosY() - sPoint.y
+                        if (Math.abs(point.getDistance(posRot)) > 1) {
+                            DPoint targetRot = r.rotate(point, r.getPos(),-r.getRotation());
+                            //r.ghostX = point.x - r.getPosX() - sensor.x;
+                            //r.ghostY = point.y - r.getPosY() - sensor.y
+                            r.ghostX = targetRot.x - r.getPosX() - sensor.x;
+                            r.ghostY = targetRot.y - r.getPosY() - sensor.y
                         }
                         break
                     }
                 }
                 sleep(20)
             }
-            sleep(1000);
-            r.returnToResting();
+            def rand = new Random()
+            r.addRotation(200-rand.nextInt(40));
+            r.drive(127,false);
+            repaint()
         }
     }
 

@@ -6,7 +6,7 @@ import info.cameronlund.autonplanner.zones.ScoringZone;
 import java.awt.*;
 
 public class Robot {
-    private float rotation = 0;
+    private double rotation = 0;
     private int restingX = 515;
     private int restingY = 630;
     private int restingRotation = 0;
@@ -36,20 +36,20 @@ public class Robot {
     }
 
 
-    public float getRotation() {
+    public double getRotation() {
         return rotation;
     }
 
-    public void setRotation(float rotation) {
+    public void setRotation(double rotation) {
         this.rotation = rotation;
     }
 
-    public void addRotation(float rotation) {
-        this.rotation += rotation;
+    public void addRotation(double rotation) {
+        setRotation(this.rotation + rotation);
     }
 
-    public void subtractRotation(float rotation) {
-        this.rotation -= rotation;
+    public void subtractRotation(double rotation) {
+        setRotation(this.rotation - rotation);
     }
 
     public void rotateGyro(int ticks, boolean right) {
@@ -64,8 +64,7 @@ public class Robot {
 
     public void moveTicks(int ticks) {
         // Pixels = (ticks/12)*2, it's ticks/12 cause I did the math for pixels in inches, not feet (Whoops)
-        // movePixels((int) ((double) ticks / 12) * 2); // This is direct drive. Below is geared 1:2
-        movePixels(((double) ticks / 12));
+        movePixels((int) ((double) ticks / 12) * 2); // This is direct drive (encoder axle same speed as wheel axle)
     }
 
     public void paint(Graphics g) {

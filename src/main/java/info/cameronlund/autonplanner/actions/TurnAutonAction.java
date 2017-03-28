@@ -128,7 +128,7 @@ public class TurnAutonAction extends AutonAction {
     public Robot renderWithGraphics(Robot robot, Graphics g) {
         int x = (int) robot.getPosX();
         int y = (int) robot.getPosY();
-        float rotation = robot.getRotation();
+        double rotation = robot.getRotation();
         robot = renderWithoutGraphics(robot);
         g.setColor(getColor());
         g.drawArc(x - 10, y - 10, 20, 20, (int) (0 - rotation) - 90, ((angleDelta < 0) ? 1 : -1) * (180 -
