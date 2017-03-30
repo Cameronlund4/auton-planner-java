@@ -14,7 +14,7 @@ public class RobotTester {
         // Main frame for the project
         JFrame frame = new JFrame("[2616E] Robot Tester");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        frame.setPreferredSize(new Dimension(693, 738));
+        frame.setPreferredSize(new Dimension(921, 966));
         frame.setResizable(false);
         frame.setMinimumSize(frame.getPreferredSize());
         BorderLayout layout = (BorderLayout) frame.getLayout();

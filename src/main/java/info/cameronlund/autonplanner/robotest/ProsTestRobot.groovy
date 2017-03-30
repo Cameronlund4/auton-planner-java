@@ -2,8 +2,8 @@ package info.cameronlund.autonplanner.robotest
 
 public class ProsTestRobot extends TestRobot {
     private final Random rand = new Random();
-    private static final GYRO_ERROR = 4;
-    private static final ENCODER_ERROR = 2;
+    private static final GYRO_ERROR = 8;
+    private static final ENCODER_ERROR = 20;
     private double encoderRight;
     private double encoderLeft;
 
@@ -25,9 +25,10 @@ public class ProsTestRobot extends TestRobot {
     public void movePixels(double distance) {
         super.movePixels(distance);
         //int ticks = distance / 2 * 12;
-        double ticks = ((distance*(144/687))/(4*Math.PI))*360
-        encoderRight += (rand.nextInt(ENCODER_ERROR) as double) - (0.5 * ENCODER_ERROR) + ticks;
-        encoderLeft += (rand.nextInt(ENCODER_ERROR)as double) - (0.5 * ENCODER_ERROR) + ticks;
+        double ticks = (distance / ((4 * Math.PI) * 25.4))*360
+        encoderRight += /*(rand.nextInt(ENCODER_ERROR) as double) - (0.5 * ENCODER_ERROR) + */ticks;
+        encoderLeft += /*(rand.nextInt(ENCODER_ERROR) as double) - (0.5 * ENCODER_ERROR) + */ticks;
+        moveGhost(ghostRot, distance + new Random().nextInt(ENCODER_ERROR) - (0.5 * ENCODER_ERROR))
     }
 
     public int encoderGet(int encoder) {
@@ -57,7 +58,7 @@ public class ProsTestRobot extends TestRobot {
 
     public void drive(int speedLeft, speedRight) {
 
-        int pixelDistance = (((((speed / 127) * 100) / 60 / 1000) * 20) * 4 * Math.PI) * (687 / (12 * 12))
+        int pixelDistance = (((((speed / 127) * 100) / 60 / 1000) * 20) * 4 * Math.PI) * 25.4
         // - (Math.PI / 2) is to make 0 up
         posX += Math.cos(Math.toRadians(rotation) - (Math.PI / 2)) * pixelDistance;
         posY += Math.sin(Math.toRadians(rotation) - (Math.PI / 2)) * pixelDistance;
@@ -79,14 +80,14 @@ public class ProsTestRobot extends TestRobot {
                             // With 4 inch wheels distance traveled a rotation is 4pi
                             // Distance traveled in 20ms is ((rpm/60/1000)*20)*4pi
                             // RPM is (speed/127)*100
-                            // Inches->pixels = inches * (687/(12*12))
-                            movePixels((((((speed / 127) * 100) / 60 / 1000) * 20) * 4 * Math.PI) * (687 / (12 * 12)))
+                            // Inches->mm = inches * 25.4
+                            movePixels((((((speed / 127) * 100) / 60 / 1000) * 20) * 4 * Math.PI) * 25.4)
                             sleep(20);
                         }
                     }
                 }
         } else {
-            movePixels((((((speed / 127) * 100) / 60 / 1000) * 20) * 4 * Math.PI) * (687 / (12 * 12)))
+            movePixels((((((speed / 127) * 100) / 60 / 1000) * 20) * 4 * Math.PI) * 25.4)
         }
     }
 
@@ -100,5 +101,13 @@ public class ProsTestRobot extends TestRobot {
 
     public enum SENSOR {
         GYROSCOPE
+    }
+
+    public int getPixX() {
+        return posX / 4;
+    }
+
+    public int getPixY() {
+        return posY / 4;
     }
 }

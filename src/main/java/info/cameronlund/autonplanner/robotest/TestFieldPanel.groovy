@@ -8,12 +8,13 @@ import java.awt.image.BufferedImage
 
 class TestFieldPanel extends FieldPanel {
     private BufferedImage fieldImage
-    def lines = [new Line(0, 0, 687, 687, 1), new Line(0, 575, 575, 0, 1)]
+    def lines = [new Line(0, 0, 915, 915, 3), new Line(0, 675, 675, 0, 3)]
     def points = [];
     def ypoints = [];
     def ppoints = [];
 
     TestFieldPanel() {
+        super(915);
         super.robot = new ProsTestRobot(lines)
         // Set up the images we need
         try {
@@ -43,8 +44,7 @@ class TestFieldPanel extends FieldPanel {
 
     void test(ProsTestRobot r) {
         while (true) {
-            println r.getPos()
-            while (r.getPosY() > 0 && r.getPosY() < 687 && r.getPosY() < 687 && r.getPosX() < 687) { // 50
+            while (r.getPixY() > 0 && r.getPixY() < 915 && r.getPixX() > 0 && r.getPixX() < 915) { // 50
                 // Move robot 1 pixel
                 r.drive(127,false);
                 repaint()
@@ -54,7 +54,7 @@ class TestFieldPanel extends FieldPanel {
                         Line l = r.getOnLine(i)
                         // Get the line sensor that hit's robot offset
                         def sensor = r.getLineSensors().get(i)
-                        DPoint gPos = new DPoint(r.getPosX()+r.ghostX,r.getPosY()+r.ghostY)
+                        DPoint gPos = new DPoint(r.ghostX/4,r.ghostY/4)
                         DPoint sPos = new DPoint(gPos.x+sensor.x, gPos.y+sensor.y);
                         DPoint posRot = r.rotate(sPos,gPos,r.rotation)
                         // Get the pos of that line sensor on the ghost
@@ -65,11 +65,11 @@ class TestFieldPanel extends FieldPanel {
                         // Find the point on the line that this perp hits
                         def point = l.getPointY(getIntersectY(l, l.perpSlope, b))
                         if (Math.abs(point.getDistance(posRot)) > 1) {
-                            DPoint targetRot = r.rotate(point, r.getPos(),-r.getRotation());
+                            DPoint targetRot = r.rotate(point, r.getPix(),-r.getRotation());
                             //r.ghostX = point.x - r.getPosX() - sensor.x;
                             //r.ghostY = point.y - r.getPosY() - sensor.y
-                            r.ghostX = targetRot.x - r.getPosX() - sensor.x;
-                            r.ghostY = targetRot.y - r.getPosY() - sensor.y
+                            r.ghostX = (targetRot.x - sensor.x)*4
+                            r.ghostY = (targetRot.y - sensor.y)*4
                         }
                         break
                     }
@@ -77,7 +77,7 @@ class TestFieldPanel extends FieldPanel {
                 sleep(20)
             }
             def rand = new Random()
-            r.addRotation(200-rand.nextInt(40));
+            r.addRotation(220-rand.nextInt(80));
             r.drive(127,false);
             repaint()
         }
@@ -121,7 +121,7 @@ class Line {
 
     void paintLine(Graphics g) {
         Graphics2D g2 = g as Graphics2D
-        g2.setColor(Color.white)
+        g2.setColor(Color.blue)
         g2.setStroke(new BasicStroke(4))
         g2.drawLine(startX as int, startY as int, endX as int, endY as int)
     }

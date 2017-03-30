@@ -1,22 +1,13 @@
 package info.cameronlund.autonplanner.panels;
 
-import info.cameronlund.autonplanner.AutonPlanner;
 import info.cameronlund.autonplanner.actions.*;
-import info.cameronlund.autonplanner.gameobjects.Cube;
 import info.cameronlund.autonplanner.gameobjects.GameObject;
-import info.cameronlund.autonplanner.gameobjects.Star;
-import info.cameronlund.autonplanner.helpers.FieldPositionHelper;
 import info.cameronlund.autonplanner.listeners.FieldClickListener;
 import info.cameronlund.autonplanner.robot.Robot;
-import info.cameronlund.autonplanner.zones.FarZone;
-import info.cameronlund.autonplanner.zones.NearZone;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 
 
@@ -25,10 +16,14 @@ public abstract class FieldPanel extends JPanel {
     private ActionManager manager;
     private ArrayList<GameObject> scored = new ArrayList<>();
 
-    public FieldPanel() {
+    public FieldPanel(int size) {
         // Set up our graphics
-        setPreferredSize(new Dimension(687, 687));
+        setPreferredSize(new Dimension(size, size));
         new Test(this);
+    }
+
+    public FieldPanel() {
+        this(687);
     }
 
     // Essentially an alias, improves readability
