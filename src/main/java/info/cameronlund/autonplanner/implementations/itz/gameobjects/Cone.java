@@ -7,46 +7,45 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
-// TODO Fix variables
 public class Cone extends GameObject {
-    private static BufferedImage cubeImage;
+    private static BufferedImage coneImage;
 
-    private static int cubeImageWidth;
-    private static int cubeImageHeight;
-    private Font cubeFont = new Font("default", Font.BOLD, 16);
+    private static int coneImageWidth;
+    private static int coneImageHeight;
+    private Font coneFont = new Font("default", Font.BOLD, 16);
 
     public Cone(int type_id) {
         super("Cone", type_id);
     }
 
-    public static void initializeImage(BufferedImage _cubePath) {
-        cubeImage = _cubePath;
-        cubeImageWidth = cubeImage.getWidth();
-        cubeImageHeight = cubeImage.getHeight();
+    public static void initializeImage(BufferedImage _conePath) {
+        coneImage = _conePath;
+        coneImageWidth = coneImage.getWidth();
+        coneImageHeight = coneImage.getHeight();
     }
 
-    public static BufferedImage getCubeImage() {
-        return cubeImage;
+    public static BufferedImage getConeImage() {
+        return coneImage;
     }
 
-    public static int getCubeImageWidth() {
-        return cubeImageWidth;
+    public static int getConeImageWidth() {
+        return coneImageWidth;
     }
 
-    public static int getCubeImageHeight() {
-        return cubeImageHeight;
+    public static int getConeImageHeight() {
+        return coneImageHeight;
     }
 
     @Override
     public void draw(ImageObserver observer, Graphics g, int centerX, int centerY) {
         if (!isOnField() || (isSkillsOnly() && !AutonPlanner.isSkill()))
             return;
-        g.drawImage(cubeImage, centerX - (cubeImageWidth / 2), centerY - (cubeImageHeight / 2), observer);
+        g.drawImage(coneImage, centerX - (coneImageWidth / 2), centerY - (coneImageHeight / 2), observer);
         int x = centerX - (getTypeId() > 9 ? 10 : 5);
         int y = centerY + 23;
-        g.setFont(cubeFont);
+        g.setFont(coneFont);
         g.setColor(Color.WHITE);
-        // Outline cause stars don't contrast well and cubes should match em
+        // Outline cause cones (probably) don't contrast well (I mean I haven't checked, but lets be honest it is vex yellow)
         g.drawString(getTypeId() + "", x - 1, y - 1);
         g.drawString(getTypeId() + "", x - 1, y + 1);
         g.drawString(getTypeId() + "", x + 1, y - 1);

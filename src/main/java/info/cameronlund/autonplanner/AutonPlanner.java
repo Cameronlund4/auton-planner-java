@@ -55,8 +55,8 @@ public class AutonPlanner {
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
         // Load the field image, scaled 3 pixels -> 1 tick
-        fieldPanel = new StarstruckFieldPanel("scale_field(2-1).png",
-                "cube.png", "star.png");
+        fieldPanel = new StarstruckFieldPanel("starstruck/scale_field(2-1).png",
+                "starstruck/cube.png", "starstruck/star.png");
         fieldPanel.setManager(manager);
 
         // Main panel containing field and list of moves
