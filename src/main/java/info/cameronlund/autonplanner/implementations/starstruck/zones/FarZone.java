@@ -1,8 +1,8 @@
-package info.cameronlund.autonplanner.starstruck.zones;
+package info.cameronlund.autonplanner.implementations.starstruck.zones;
 
 import info.cameronlund.autonplanner.gameobjects.GameObject;
-import info.cameronlund.autonplanner.starstruck.gameobjects.Cube;
-import info.cameronlund.autonplanner.starstruck.gameobjects.Star;
+import info.cameronlund.autonplanner.implementations.starstruck.gameobjects.Cube;
+import info.cameronlund.autonplanner.implementations.starstruck.gameobjects.Star;
 import info.cameronlund.autonplanner.zones.ScoringZone;
 
 import java.awt.*;

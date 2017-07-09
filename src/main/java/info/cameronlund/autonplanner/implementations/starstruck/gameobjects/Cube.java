@@ -1,4 +1,4 @@
-package info.cameronlund.autonplanner.starstruck.gameobjects;
+package info.cameronlund.autonplanner.implementations.starstruck.gameobjects;
 
 import info.cameronlund.autonplanner.AutonPlanner;
 import info.cameronlund.autonplanner.gameobjects.GameObject;
