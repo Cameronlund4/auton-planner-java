@@ -129,7 +129,7 @@ public class FieldPositionHelper {
             for (int skip : skips) // If we don't want to draw at this loc, continue
                 if (i == skip)
                     continue drawLoop;
-            cones[startCone++].setRestingReturn(startX + (i * 60), y);
+            cones[startCone++].setRestingReturn(startX + (i * 48), y);
         }
     }
 
