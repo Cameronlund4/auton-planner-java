@@ -1,5 +1,7 @@
 package info.cameronlund.autonplanner.helpers;
 
+import info.cameronlund.autonplanner.implementations.itz.gameobjects.Cone;
+import info.cameronlund.autonplanner.implementations.itz.gameobjects.MobileGoal;
 import info.cameronlund.autonplanner.implementations.starstruck.gameobjects.Cube;
 import info.cameronlund.autonplanner.implementations.starstruck.gameobjects.Star;
 
@@ -74,5 +76,13 @@ public class FieldPositionHelper {
 
         for (int i = 1; i < 4; i++)
             cubes[i].setSkillsOnly(true);
+    }
+
+    public static void setConePositions(Cone[] cones) {
+        // TODO Implement
+    }
+
+    public static void setMogoPositions(MobileGoal[] mogos) {
+        // TODO Implement
     }
 }
