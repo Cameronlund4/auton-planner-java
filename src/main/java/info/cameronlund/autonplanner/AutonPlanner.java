@@ -9,6 +9,7 @@ import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.implementations.itz.panels.ITZFieldPanel;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
 import info.cameronlund.autonplanner.panels.FieldPanel;
+import info.cameronlund.autonplanner.implementations.starstruck.panels.StarstruckFieldPanel;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -55,8 +56,8 @@ public class AutonPlanner {
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
         // Load the field image, scaled 3 pixels -> 1 tick
-        fieldPanel = new ITZFieldPanel("itz/itz_field.png", "itz/itz_mg_red.png",
-                "itz/itz_mg_blue.png", "itz/itz_cone.png");
+        fieldPanel = new ITZFieldPanel("itz/itz_field.png",
+                "itz/itz_mg_red.png", "itz/itz_mg_blue.png", "itz/itz_cone.png");
         fieldPanel.setManager(manager);
 
         // Main panel containing field and list of moves
@@ -318,7 +319,7 @@ public class AutonPlanner {
                 Process p = Runtime.getRuntime().exec("pros mu 'D:\\Google Drive\\Computer Drive\\Robotics\\2616E\\Starstruck\\pros_beta'");
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 System.out.println(p.isAlive());
-                while (p.isAlive()) ;
+                while (p.isAlive());
                 while ((line = input.readLine()) != null) {
                     System.out.println(line);
                 }
