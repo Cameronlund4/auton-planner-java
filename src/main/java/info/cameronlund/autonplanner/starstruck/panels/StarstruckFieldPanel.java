@@ -1,12 +1,13 @@
-package info.cameronlund.autonplanner.panels;
+package info.cameronlund.autonplanner.starstruck.panels;
 
 import info.cameronlund.autonplanner.AutonPlanner;
-import info.cameronlund.autonplanner.gameobjects.Cube;
 import info.cameronlund.autonplanner.gameobjects.GameObject;
-import info.cameronlund.autonplanner.gameobjects.Star;
 import info.cameronlund.autonplanner.helpers.FieldPositionHelper;
-import info.cameronlund.autonplanner.zones.FarZone;
-import info.cameronlund.autonplanner.zones.NearZone;
+import info.cameronlund.autonplanner.panels.FieldPanel;
+import info.cameronlund.autonplanner.starstruck.gameobjects.Cube;
+import info.cameronlund.autonplanner.starstruck.gameobjects.Star;
+import info.cameronlund.autonplanner.starstruck.zones.FarZone;
+import info.cameronlund.autonplanner.starstruck.zones.NearZone;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

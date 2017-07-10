@@ -1,6 +1,7 @@
-package info.cameronlund.autonplanner.gameobjects;
+package info.cameronlund.autonplanner.starstruck.gameobjects;
 
 import info.cameronlund.autonplanner.AutonPlanner;
+import info.cameronlund.autonplanner.gameobjects.GameObject;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

@@ -1,21 +1,22 @@
-package info.cameronlund.autonplanner.zones;
+package info.cameronlund.autonplanner.starstruck.zones;
 
-import info.cameronlund.autonplanner.gameobjects.Cube;
 import info.cameronlund.autonplanner.gameobjects.GameObject;
-import info.cameronlund.autonplanner.gameobjects.Star;
+import info.cameronlund.autonplanner.starstruck.gameobjects.Cube;
+import info.cameronlund.autonplanner.starstruck.gameobjects.Star;
+import info.cameronlund.autonplanner.zones.ScoringZone;
 
 import java.awt.*;
 import java.awt.image.ImageObserver;
 
-public class FarZone extends ScoringZone {
+public class NearZone extends ScoringZone {
 
-    public FarZone() {
+    public NearZone() {
         super("Near zone");
     }
 
     @Override
     public void paint(ImageObserver observer, Graphics g) {
-        int startingY = 87;
+        int startingY = 246;
         int starCount = 0;
         int cubeCount = 0;
         for (GameObject object : getScoredObjects()) {
@@ -31,8 +32,7 @@ public class FarZone extends ScoringZone {
         g.drawImage(Cube.getCubeImage(), 303 - (Cube.getCubeImageWidth() / 2),
                 startingY - 4 - (Cube.getCubeImageHeight()), observer);
         g.drawString("Scored: " + cubeCount, 343, (startingY - (Cube.getCubeImageHeight() / 2)) - 10);
-        g.drawString("  (" + cubeCount * 2 + " pts)", 343,
-                (startingY - 4 - (Cube.getCubeImageHeight() / 2)) + 10);
+        g.drawString("  (" + cubeCount * 2 + " pts)", 343, (startingY - 4 - (Cube.getCubeImageHeight() / 2)) + 10);
 
         // Draw star count and score
         g.drawImage(Star.getStarImage(), 303 - (Star.getStarImageWidth() / 2),
@@ -51,7 +51,6 @@ public class FarZone extends ScoringZone {
                 (startingY + (Cube.getCubeImageHeight() / 2)) + 25);
 
         // Draw total points count
-        g.drawString("(" + ((starCount) + (cubeCount * 2)) + " total pts)", 430,
-                (startingY + (Cube.getCubeImageHeight() / 2)) + 22);
+        g.drawString("(" + ((starCount) + (cubeCount * 2)) + " total pts)", 430, (startingY + (Cube.getCubeImageHeight() / 2)) + 22);
     }
 }

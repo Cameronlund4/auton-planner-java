@@ -1,7 +1,7 @@
 package info.cameronlund.autonplanner.helpers;
 
-import info.cameronlund.autonplanner.gameobjects.Cube;
-import info.cameronlund.autonplanner.gameobjects.Star;
+import info.cameronlund.autonplanner.starstruck.gameobjects.Cube;
+import info.cameronlund.autonplanner.starstruck.gameobjects.Star;
 
 public class FieldPositionHelper {
     public static void setStarPositions(Star[] stars) {

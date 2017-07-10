@@ -8,7 +8,8 @@ import info.cameronlund.autonplanner.filters.AutonPlanerFileFilter;
 import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
 import info.cameronlund.autonplanner.panels.FieldPanel;
-import info.cameronlund.autonplanner.panels.StarstruckFieldPanel;
+import info.cameronlund.autonplanner.starstruck.panels.StarstruckFieldPanel;
+
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
 import java.awt.*;
