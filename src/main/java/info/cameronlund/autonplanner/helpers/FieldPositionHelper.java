@@ -79,7 +79,58 @@ public class FieldPositionHelper {
     }
 
     public static void setConePositions(Cone[] cones) {
-        // TODO Implement
+        for (Cone cone : cones)
+            cone.setOnField(true);
+
+        // Game loads
+        // Game loader: 675, 285
+        for (int i = 0; i < 12; i++) {
+            cones[i].setRestingReturn(675, 285);
+            cones[i].setOnField(false);
+        }
+        cones[0].setOnField(true); // One cone on the loader
+
+        // Pre load
+        cones[12].setRestingReturn(570, 570); // Pre load, put in mid of the cone
+
+        // Okay, let's make our lives easy
+        // Cones are always spaced in increments of 60
+        // They're also all aligned in rows on the field
+        // So, let's just generate them in rows top-down
+
+        /*
+        ** The top half section
+        ** (455, 20), 50 between close rows, 55 between far rows
+        */
+        generateConeRow(cones, 13, 455, 20, 5); // 5
+        generateConeRow(cones, 18, 455, 70, 5, 0, 1); // 3
+        generateConeRow(cones, 21, 455, 120, 5); // 5
+        generateConeRow(cones, 18, 455, 175, 5, 0, 1, 3); // 2
+        generateConeRow(cones, 26, 357, 230, 6, 2, 4); // 4
+        generateConeRow(cones, 30, 344, 285, 3, 1); // 2
+
+        /*
+        ** Bottom half section
+        ** (20, 345), 50 between close rows, 55 between far rows
+        */
+        generateConeRow(cones, 32, 20, 345, 8, 1, 3, 4, 6); // 4
+        generateConeRow(cones, 36, 20, 400, 7, 1, 3, 5); // 4
+        generateConeRow(cones, 40, 20, 455, 6, 1, 3); // 4
+        generateConeRow(cones, 44, 20, 510, 2); // 2
+        generateConeRow(cones, 46, 20, 565, 7); // 7
+        generateConeRow(cones, 53, 20, 615, 3); // 3
+        generateConeRow(cones, 56, 20, 665, 7); // 7
+    }
+
+    private static void generateConeRow(final Cone[] cones, int startCone, final int startX, final int y,
+                                        final int count, final int... skips) {
+        drawLoop:
+        for (int i = 0; i < count; i++) {
+            for (int skip : skips) // If we don't want to draw at this loc, continue
+                if (i == skip)
+                    continue drawLoop;
+            cones[startCone++].setRestingReturn(startX + (i * 60), y);
+        }
     }
 
     public static void setMogoPositions(MobileGoal[] mogos) {
