@@ -9,7 +9,6 @@ import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.implementations.itz.panels.ITZFieldPanel;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
 import info.cameronlund.autonplanner.panels.FieldPanel;
-import info.cameronlund.autonplanner.implementations.starstruck.panels.StarstruckFieldPanel;
 
 import javax.swing.*;
 import javax.swing.border.MatteBorder;
@@ -23,7 +22,7 @@ import java.util.Scanner;
 public class AutonPlanner {
     private static boolean isSkill = false;
     private static boolean preloadLoaded = false;
-    private static int startingRotation = 0;
+    private static int startingRotation = -45;
     private ArrayList<ActionListener> modeSwitchListeners = new ArrayList<>();
     private int actionId = 0;
     private String autonName = "Unnamed Auton";
@@ -150,16 +149,16 @@ public class AutonPlanner {
             try {
                 String text = offsetField.getText();
                 String[] parts = text.split(",");
-                fieldPanel.getRobot().setResting(515 + Integer.parseInt(parts[0]),
-                        (630 - (Integer.parseInt(parts[1]))));
+                fieldPanel.getRobot().setResting(545 + Integer.parseInt(parts[0]),
+                        (545 - (Integer.parseInt(parts[1]))));
                 frame.repaint();
             } catch (Exception ignored) {
-                offsetField.setText((fieldPanel.getRobot().getRestingX() - 515) + "," +
-                        -1 * (fieldPanel.getRobot().getRestingY() - 630));
+                offsetField.setText((fieldPanel.getRobot().getRestingX() - 545) + "," +
+                        -1 * (fieldPanel.getRobot().getRestingY() - 545));
             }
         });
-        offsetField.setText((fieldPanel.getRobot().getRestingX() - 515) + "," +
-                (fieldPanel.getRobot().getRestingY() - 630));
+        offsetField.setText((fieldPanel.getRobot().getRestingX() - 545) + "," +
+                (fieldPanel.getRobot().getRestingY() - 545));
         gbc.gridx = 0;
         gbc.gridy = 0;
         offsetPosWrapper.add(offsetLabel, gbc);
@@ -395,8 +394,8 @@ public class AutonPlanner {
         startingRotation = object.get("startRot").getAsInt();
         angleField.setText(startingRotation + "");
         offsetField.setText(object.get("startX").getAsInt() + "," + -1 * object.get("startY").getAsInt());
-        fieldPanel.getRobot().setResting(515 + object.get("startX").getAsInt(),
-                630 + object.get("startY").getAsInt());
+        fieldPanel.getRobot().setResting(545 + object.get("startX").getAsInt(),
+                545 + object.get("startY").getAsInt());
         // TODO Load skills and preloaded state
     }
 
@@ -404,8 +403,8 @@ public class AutonPlanner {
         JsonObject file = new JsonObject();
         file.addProperty("autonName", autonName);
         file.addProperty("startRot", startingRotation);
-        file.addProperty("startX", fieldPanel.getRobot().getRestingX() - 515);
-        file.addProperty("startY", fieldPanel.getRobot().getRestingY() - 630);
+        file.addProperty("startX", fieldPanel.getRobot().getRestingX() - 545);
+        file.addProperty("startY", fieldPanel.getRobot().getRestingY() - 545);
         file.add("actions", manager.toJson());
         // TODO Save skills and preloaded state
         System.out.println(file.toString());

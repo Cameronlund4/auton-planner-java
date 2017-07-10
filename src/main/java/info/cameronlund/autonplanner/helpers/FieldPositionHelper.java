@@ -84,14 +84,14 @@ public class FieldPositionHelper {
 
         // Game loads
         // Game loader: 675, 285
-        for (int i = 0; i < 12; i++) {
+        for (int i = 1; i < 13; i++) {
             cones[i].setRestingReturn(675, 285);
             cones[i].setOnField(false);
         }
-        cones[0].setOnField(true); // One cone on the loader
+        cones[1].setOnField(true); // One cone on the loader
 
         // Pre load
-        cones[12].setRestingReturn(570, 570); // Pre load, put in mid of the cone
+        cones[0].setRestingReturn(535, 535); // Pre load, put in mid of the cone
 
         // Okay, let's make our lives easy
         // Cones are always spaced in increments of 60
@@ -157,6 +157,14 @@ public class FieldPositionHelper {
     }
 
     public static void setMogoPositions(MobileGoal[] mogos) {
-        // TODO Implement
+        mogos[0].setRestingReturn(230, 345);
+        mogos[1].setRestingReturn(345, 230);
+        mogos[2].setRestingReturn(171, 622);
+        mogos[3].setRestingReturn(622, 171);
+
+        mogos[4].setRestingReturn(457, 342);
+        mogos[5].setRestingReturn(342, 457);
+        mogos[6].setRestingReturn(512, 62);
+        mogos[7].setRestingReturn(62, 512);
     }
 }

@@ -7,8 +7,8 @@ import java.awt.*;
 
 public class Robot {
     private double rotation = 0;
-    private int restingX = 515;
-    private int restingY = 630;
+    private int restingX = 545;
+    private int restingY = 545;
     private int restingRotation = 0;
     private double posX = restingX;
     private double posY = restingY;

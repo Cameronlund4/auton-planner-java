@@ -6,7 +6,6 @@ import info.cameronlund.autonplanner.gameobjects.GameObject;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
-import java.nio.Buffer;
 
 // TODO Fix variables, draw the right color for the right goal type
 public class MobileGoal extends GameObject {
@@ -53,7 +52,8 @@ public class MobileGoal extends GameObject {
     public void draw(ImageObserver observer, Graphics g, int centerX, int centerY) {
         if (!isOnField() || (isSkillsOnly() && !AutonPlanner.isSkill()))
             return;
-        g.drawImage(mgImageBlue, centerX - (mgImageWidth / 2), centerY - (mgImageHeight / 2), observer);
+        g.drawImage(color ? mgImageRed : mgImageBlue, centerX - (mgImageWidth / 2),
+                centerY - (mgImageHeight / 2), observer);
         int x = centerX - (getTypeId() > 9 ? 10 : 5);
         int y = centerY + 23;
         g.setFont(cubeFont);

@@ -15,7 +15,7 @@ import java.io.IOException;
 public class ITZFieldPanel extends FieldPanel{
 
     private BufferedImage fieldImage;
-    private Cone[] cones = new Cone[68];
+    private Cone[] cones = new Cone[65];
     private MobileGoal[] mogos = new MobileGoal[8];
     //private NearZone nearZone;
     //private FarZone farZone;
@@ -31,8 +31,8 @@ public class ITZFieldPanel extends FieldPanel{
             e.printStackTrace();
         }
 
-        // Initialize cones 1-68
-        for (int i = 0; i < 68; i++)
+        // Initialize cones 1-65
+        for (int i = 0; i < 65; i++)
             cones[i] = new Cone(i + 1);
 
         // initialize mobile goals 1-6
