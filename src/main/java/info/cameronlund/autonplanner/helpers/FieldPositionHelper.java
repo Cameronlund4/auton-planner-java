@@ -102,34 +102,57 @@ public class FieldPositionHelper {
         ** The top half section
         ** (455, 20), 50 between close rows, 55 between far rows
         */
-        generateConeRow(cones, 13, 455, 20, 5); // 5
-        generateConeRow(cones, 18, 455, 70, 5, 0, 1); // 3
-        generateConeRow(cones, 21, 455, 120, 5); // 5
-        generateConeRow(cones, 18, 455, 175, 5, 0, 1, 3); // 2
-        generateConeRow(cones, 26, 357, 230, 6, 2, 4); // 4
-        generateConeRow(cones, 30, 344, 285, 3, 1); // 2
+        generateConeRowLong(cones, 13, 456, 20, 3); // 3
+        generateConeRowShort(cones, 16, 620, 20, 2); // 2
+        generateConeRowShort(cones, 18, 570, 70, 3); // 3
+        //generateConeRowShort(cones, 21, 455, 120, 5); // 5
+        generateConeRowLong(cones, 21, 456, 120, 3); // 3
+        generateConeRowShort(cones, 24, 620, 120, 2); // 2
+        generateConeRowShort(cones, 26, 570, 175, 3, 1); // 2
+        generateConeRowShort(cones, 28, 570, 230, 3, 1); // 2
+        generateConeRowLong(cones, 30, 400, 235, 2); // 2
+        generateConeRowLong(cones, 32, 342, 290, 3, 1); // 2
+        //generateConeRowLong(cones, 28, 400, 230, 6, 2, 4); // 4
+        //generateConeRowShort(cones, 32, 456, 285, 3, 1); // 2
 
         /*
         ** Bottom half section
         ** (20, 345), 50 between close rows, 55 between far rows
         */
-        generateConeRow(cones, 32, 20, 345, 8, 1, 3, 4, 6); // 4
-        generateConeRow(cones, 36, 20, 400, 7, 1, 3, 5); // 4
-        generateConeRow(cones, 40, 20, 455, 6, 1, 3); // 4
-        generateConeRow(cones, 44, 20, 510, 2); // 2
-        generateConeRow(cones, 46, 20, 565, 7); // 7
-        generateConeRow(cones, 53, 20, 615, 3); // 3
-        generateConeRow(cones, 56, 20, 665, 7); // 7
+        generateConeRowShort(cones, 34, 19, 350, 3, 1); // 2
+        generateConeRowLong(cones, 36, 285, 350, 3, 1); //2
+        generateConeRowShort(cones, 38, 19, 405, 3, 1); // 2
+        generateConeRowLong(cones, 40, 173+56, 405, 3, 1); // 2
+
+        generateConeRowShort(cones, 42, 19, 460, 3, 1); // 2
+        generateConeRowLong(cones, 44, 173+56, 460, 2); // 2
+
+        generateConeRowShort(cones, 46, 19, 515, 3, 1); // 2
+        generateConeRowShort(cones, 48, 19, 570, 3); // 3
+        generateConeRowLong(cones, 51, 173, 570, 4); // 4
+        generateConeRowShort(cones, 55, 19, 620, 3); // 3
+        generateConeRowShort(cones, 58, 19, 670, 3); // 3
+        generateConeRowLong(cones, 61, 173, 670, 4); // 4
+    }
+
+    private static void generateConeRowShort(final Cone[] cones, int startCone, final int startX, final int y,
+                                             final int count, final int... skips) {
+        generateConeRow(cones, startCone, startX, y, count, 49, skips);
+    }
+
+    private static void generateConeRowLong(final Cone[] cones, int startCone, final int startX, final int y,
+                                            final int count, final int... skips) {
+        generateConeRow(cones, startCone, startX, y, count, 57, skips);
     }
 
     private static void generateConeRow(final Cone[] cones, int startCone, final int startX, final int y,
-                                        final int count, final int... skips) {
+                                        final int count, final int multiplier, final int... skips) {
         drawLoop:
         for (int i = 0; i < count; i++) {
             for (int skip : skips) // If we don't want to draw at this loc, continue
                 if (i == skip)
                     continue drawLoop;
-            cones[startCone++].setRestingReturn(startX + (i * 60), y);
+            cones[startCone++].setRestingReturn(startX + (i * multiplier), y);
         }
     }
 

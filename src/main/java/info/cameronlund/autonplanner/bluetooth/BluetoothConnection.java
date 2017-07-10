@@ -25,4 +25,6 @@ public class BluetoothConnection {
         message+="\r\n";
         port.writeBytes(message.getBytes());
     }
+
+
 }
