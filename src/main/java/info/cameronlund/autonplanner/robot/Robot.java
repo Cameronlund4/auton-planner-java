@@ -6,7 +6,7 @@ import info.cameronlund.autonplanner.zones.ScoringZone;
 import java.awt.*;
 
 public class Robot {
-    private double rotation = 0;
+    private double rotation = -45;
     private int restingX = 545;
     private int restingY = 545;
     private int restingRotation = 0;

@@ -81,7 +81,7 @@ public abstract class FieldPanel extends JPanel {
                         System.out.println("Math.PI: "+Math.PI+" Input: " + lineRotTemp + " Output: " + lineRot);
                     }
                     System.out.println("Line rot: " + lineRot + "," + Math.toDegrees(lineRot));
-                    int distance = (int) (Math.sqrt(Math.pow(y - y1, 2) + Math.pow(x - x1, 2)) / 2) * 24;
+                    int distance = (int) (Math.sqrt(Math.pow(y - y1, 2) + Math.pow(x - x1, 2)) / 2) * 12;
 
                     // Create the turn to the line
                     AutonActionWrapper turnWrapper = manager.createNewAction();

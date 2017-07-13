@@ -43,6 +43,9 @@ public class Cone extends GameObject {
         g.drawImage(coneImage, centerX - (coneImageWidth / 2), centerY - (coneImageHeight / 2), observer);
         int x = centerX - (getTypeId() > 9 ? 10 : 5);
         int y = centerY + 23;
+        int bottomDistance = 687 - y;
+        if (bottomDistance < 5)
+            y = 687 - 5;
         g.setFont(coneFont);
         g.setColor(Color.WHITE);
         // Outline cause cones (probably) don't contrast well (I mean I haven't checked, but lets be honest it is vex yellow)
