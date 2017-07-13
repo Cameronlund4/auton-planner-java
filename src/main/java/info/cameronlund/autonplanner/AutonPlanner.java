@@ -8,6 +8,7 @@ import info.cameronlund.autonplanner.filters.AutonPlanerFileFilter;
 import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.implementations.itz.panels.ITZFieldPanel;
 import info.cameronlund.autonplanner.panels.ActionListPanel;
+import info.cameronlund.autonplanner.panels.BluetoothFieldPanel;
 import info.cameronlund.autonplanner.panels.FieldPanel;
 
 import javax.swing.*;
@@ -26,11 +27,14 @@ public class AutonPlanner {
     private ArrayList<ActionListener> modeSwitchListeners = new ArrayList<>();
     private int actionId = 0;
     private String autonName = "Unnamed Auton";
-    private ActionManager manager;
-    private FieldPanel fieldPanel;
-    private JTextField offsetField;
-    private JTextField angleField;
+    private final ActionManager manager;
+    private final FieldPanel mainFieldPanel;
+    private FieldPanel equippedPanel;
+    private final BluetoothFieldPanel bluePanel;
+    private final JTextField offsetField;
+    private final JTextField angleField;
     private File currentFile;
+    private final JPanel mainPanel;
 
     public AutonPlanner() {
         // Main frame for the project
@@ -55,12 +59,16 @@ public class AutonPlanner {
         // Load the list of events the auton does
         ActionListPanel actionList = manager.getActionListPanel();
         // Load the field image, scaled 3 pixels -> 1 tick
-        fieldPanel = new ITZFieldPanel("itz/itz_field.png",
+        mainFieldPanel = new ITZFieldPanel("itz/itz_field.png",
                 "itz/itz_mg_red.png", "itz/itz_mg_blue.png", "itz/itz_cone.png");
-        fieldPanel.setManager(manager);
+        mainFieldPanel.setManager(manager);
+        equippedPanel = mainFieldPanel;
+
+        bluePanel = new BluetoothFieldPanel(mainFieldPanel.getRobot());
+        bluePanel.setManager(manager);
 
         // Main panel containing field and list of moves
-        JPanel mainPanel = new JPanel();
+        mainPanel = new JPanel();
         mainPanel.setLayout(new BorderLayout());
         layout = (BorderLayout) mainPanel.getLayout();
         layout.setVgap(0);
@@ -123,10 +131,10 @@ public class AutonPlanner {
                 setStartingRotation(rotation);
                 frame.repaint();
             } catch (NumberFormatException ignored) {
-                angleField.setText(((int) fieldPanel.getRobot().getRotation()) + "");
+                angleField.setText(((int) equippedPanel.getRobot().getRotation()) + "");
             }
         });
-        angleField.setText(((int) fieldPanel.getRobot().getRotation()) + "");
+        angleField.setText(((int) equippedPanel.getRobot().getRotation()) + "");
         gbc.gridx = 0;
         gbc.gridy = 0;
         startingAngleWrapper.add(angleLabel, gbc);
@@ -149,16 +157,16 @@ public class AutonPlanner {
             try {
                 String text = offsetField.getText();
                 String[] parts = text.split(",");
-                fieldPanel.getRobot().setResting(545 + Integer.parseInt(parts[0]),
+                equippedPanel.getRobot().setResting(545 + Integer.parseInt(parts[0]),
                         (545 - (Integer.parseInt(parts[1]))));
                 frame.repaint();
             } catch (Exception ignored) {
-                offsetField.setText((fieldPanel.getRobot().getRestingX() - 545) + "," +
-                        -1 * (fieldPanel.getRobot().getRestingY() - 545));
+                offsetField.setText((equippedPanel.getRobot().getRestingX() - 545) + "," +
+                        -1 * (equippedPanel.getRobot().getRestingY() - 545));
             }
         });
-        offsetField.setText((fieldPanel.getRobot().getRestingX() - 545) + "," +
-                (fieldPanel.getRobot().getRestingY() - 545));
+        offsetField.setText((equippedPanel.getRobot().getRestingX() - 545) + "," +
+                (equippedPanel.getRobot().getRestingY() - 545));
         gbc.gridx = 0;
         gbc.gridy = 0;
         offsetPosWrapper.add(offsetLabel, gbc);
@@ -318,7 +326,7 @@ public class AutonPlanner {
                 Process p = Runtime.getRuntime().exec("pros mu 'D:\\Google Drive\\Computer Drive\\Robotics\\2616E\\Starstruck\\pros_beta'");
                 BufferedReader input = new BufferedReader(new InputStreamReader(p.getInputStream()));
                 System.out.println(p.isAlive());
-                while (p.isAlive());
+                while (p.isAlive()) ;
                 while ((line = input.readLine()) != null) {
                     System.out.println(line);
                 }
@@ -331,17 +339,63 @@ public class AutonPlanner {
 
         });
 
+        JMenu blueMenu = new JMenu("Bluetooth");
 
+        JMenuItem blueOpenMenuItem = new JMenuItem("Open Connection");
+        JMenuItem blueCloseMenuItem = new JMenuItem("Close Connection");
+        JMenuItem blueToggleMenuItem = new JMenuItem("Toggle Panel");
+        blueCloseMenuItem.setEnabled(false);
+        blueToggleMenuItem.setEnabled(false);
+
+        blueOpenMenuItem.setActionCommand("BlueOpen");
+        blueOpenMenuItem.addActionListener(l -> {
+            System.out.println("Pressed BlueOpen");
+            // Handle toggling buttons pressability
+            if (bluePanel.connect()) {
+                blueOpenMenuItem.setEnabled(false);
+                blueCloseMenuItem.setEnabled(true);
+                blueToggleMenuItem.setEnabled(true);
+            }
+        });
+
+        blueCloseMenuItem.setActionCommand("BlueClose");
+        blueCloseMenuItem.addActionListener(l -> {
+            System.out.println("Pressed BlueClose");
+            // Handle toggling buttons pressability
+            blueOpenMenuItem.setEnabled(true);
+            blueCloseMenuItem.setEnabled(false);
+            blueToggleMenuItem.setEnabled(false);
+
+            bluePanel.disconnect();
+
+            if (equippedPanel instanceof BluetoothFieldPanel)
+                setEquippedPanel(mainFieldPanel);
+        });
+
+        blueToggleMenuItem.setActionCommand("Toggle Blue Panel");
+        blueToggleMenuItem.addActionListener(l -> {
+            System.out.println("Pressed BlueToggle");
+
+            if (equippedPanel instanceof BluetoothFieldPanel)
+                setEquippedPanel(mainFieldPanel);
+            else
+                setEquippedPanel(bluePanel);
+        });
+
+        blueMenu.add(blueOpenMenuItem);
+        blueMenu.add(blueCloseMenuItem);
+        blueMenu.add(blueToggleMenuItem);
         prosMenu.add(makeFlashMenuItem);
         fileMenu.add(saveMenuItem);
         fileMenu.add(saveAsMenuItem);
         JMenuBar menuBar = new JMenuBar();
         menuBar.add(fileMenu);
         menuBar.add(prosMenu);
+        menuBar.add(blueMenu);
         // End menu creation ---------
 
         // Add our content to the frame
-        mainPanel.add(fieldPanel, BorderLayout.CENTER);
+        mainPanel.add(equippedPanel, BorderLayout.CENTER);
         mainPanel.add(actionList, BorderLayout.EAST);
         contentPanel.add(mainPanel, BorderLayout.CENTER);
         contentPanel.add(sidePanel, BorderLayout.EAST);
@@ -394,7 +448,7 @@ public class AutonPlanner {
         startingRotation = object.get("startRot").getAsInt();
         angleField.setText(startingRotation + "");
         offsetField.setText(object.get("startX").getAsInt() + "," + -1 * object.get("startY").getAsInt());
-        fieldPanel.getRobot().setResting(545 + object.get("startX").getAsInt(),
+        equippedPanel.getRobot().setResting(545 + object.get("startX").getAsInt(),
                 545 + object.get("startY").getAsInt());
         // TODO Load skills and preloaded state
     }
@@ -403,11 +457,20 @@ public class AutonPlanner {
         JsonObject file = new JsonObject();
         file.addProperty("autonName", autonName);
         file.addProperty("startRot", startingRotation);
-        file.addProperty("startX", fieldPanel.getRobot().getRestingX() - 545);
-        file.addProperty("startY", fieldPanel.getRobot().getRestingY() - 545);
+        file.addProperty("startX", equippedPanel.getRobot().getRestingX() - 545);
+        file.addProperty("startY", equippedPanel.getRobot().getRestingY() - 545);
         file.add("actions", manager.toJson());
         // TODO Save skills and preloaded state
         System.out.println(file.toString());
         return file;
+    }
+
+    private void setEquippedPanel(FieldPanel panel) {
+        if (equippedPanel != null)
+            mainPanel.remove(equippedPanel);
+        mainPanel.add(panel, BorderLayout.CENTER);
+        equippedPanel = panel;
+        mainPanel.validate();
+        mainPanel.repaint();
     }
 }
