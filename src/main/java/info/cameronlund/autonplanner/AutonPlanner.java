@@ -2,8 +2,7 @@ package info.cameronlund.autonplanner;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import info.cameronlund.autonplanner.actions.ActionManager;
-import info.cameronlund.autonplanner.actions.ActionType;
+import info.cameronlund.autonplanner.actions.*;
 import info.cameronlund.autonplanner.filters.AutonPlanerFileFilter;
 import info.cameronlund.autonplanner.helpers.ActionCallHelper;
 import info.cameronlund.autonplanner.implementations.itz.panels.ITZFieldPanel;
@@ -37,6 +36,12 @@ public class AutonPlanner {
     private final JPanel mainPanel;
 
     public AutonPlanner() {
+        ActionType.registerAction("Drive", DriveAutonAction.class);
+        ActionType.registerAction("Turn", TurnAutonAction.class);
+        ActionType.registerAction("Lift", LiftAutonAction.class);
+        ActionType.registerAction("Claw", ClawAutonAction.class);
+        ActionType.registerAction("Wait", WaitAutonAction.class);
+
         // Main frame for the project
         JFrame frame = new JFrame("[2616E] Auton Planner");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
@@ -214,7 +219,8 @@ public class AutonPlanner {
         moveOptionPanel.setPreferredSize(new Dimension(400, 50));
         moveOptionPanel.setBorder(new MatteBorder(0, 0, 1, 0, Color.GRAY));
 
-        JComboBox<String> modeList = new JComboBox<>(ActionType.getTypesList());
+        JComboBox<String> modeList = new JComboBox<>(ActionType.getTypesList()
+                .toArray(new String[ActionType.getTypesList().size()]));
         modeList.setOpaque(false);
         modeList.setPreferredSize(new Dimension(100, 30));
         modeList.setMaximumSize(new Dimension(100, 30));

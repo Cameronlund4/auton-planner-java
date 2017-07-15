@@ -129,7 +129,7 @@ public class ActionManager {
         if (actionTypeBox != null) {
             actionTypeBox.setEnabled(selected != null);
             if (selected != null)
-                actionTypeBox.setSelectedIndex(selected.getType().ordinal());
+                actionTypeBox.setSelectedIndex(ActionType.indexOf(selected.getType()));
         }
         repaint();
     }
@@ -217,7 +217,7 @@ public class ActionManager {
         actionTypeBox.setEnabled(selected != null);
         actionTypeBox.addActionListener((e) -> {
             if (selected != null) {
-                selected.setType(ActionType.values()[actionTypeBox.getSelectedIndex()]);
+                selected.setType(ActionType.getTypesList().get(actionTypeBox.getSelectedIndex()));
             }
         });
     }
@@ -278,19 +278,19 @@ public class ActionManager {
             // Set the type of the action
             switch (object.get("type").getAsString()) {
                 case "CLAW":
-                    wrapper.setType(ActionType.CLAW);
+                    wrapper.setType("Claw");
                     break;
                 case "DRIVE":
-                    wrapper.setType(ActionType.DRIVE);
+                    wrapper.setType("Drive");
                     break;
                 case "LIFT":
-                    wrapper.setType(ActionType.LIFT);
+                    wrapper.setType("Lift");
                     break;
                 case "TURN":
-                    wrapper.setType(ActionType.TURN);
+                    wrapper.setType("Turn");
                     break;
                 case "WAIT":
-                    wrapper.setType(ActionType.WAIT);
+                    wrapper.setType("Wait");
                     break;
             }
             // Load the data for the action

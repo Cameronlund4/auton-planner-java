@@ -15,7 +15,7 @@ public class AutonActionWrapper {
     private JLabel subTitleLabel;
     private String actionName;
     private boolean selected = false;
-    private ActionType type = ActionType.DRIVE;
+    private String type = "Drive";
     private int id;
     private AutonAction action;
 
@@ -143,7 +143,7 @@ public class AutonActionWrapper {
 
     private void resetSubtitleText() {
         // Make type start with capital and rest lower
-        String typeString = type.toString().toLowerCase();
+        String typeString = type.toLowerCase();
         typeString = typeString.replace(typeString.charAt(0), Character.toUpperCase(typeString.charAt(0)));
 
         // Change our text
@@ -154,45 +154,15 @@ public class AutonActionWrapper {
         return defaultBg;
     }
 
-    public ActionType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ActionType type) {
+    public void setType(String type) {
         this.type = type;
-        switch (type) {
-            case DRIVE:
-                if (!(action instanceof DriveAutonAction)) {
-                    action = new DriveAutonAction(this);
-                    manager.redrawContent();
-                }
-                break;
-            case TURN:
-                if (!(action instanceof TurnAutonAction)) {
-                    action = new TurnAutonAction(this);
-                    manager.redrawContent();
-                }
-                break;
-            case WAIT:
-                if (!(action instanceof WaitAutonAction)) {
-                    action = new WaitAutonAction(this);
-                    manager.redrawContent();
-                }
-                break;
-            case LIFT:
-                if (!(action instanceof LiftAutonAction)) {
-                    action = new LiftAutonAction(this);
-                    manager.redrawContent();
-                }
-                break;
-            case CLAW:
-                if (!(action instanceof ClawAutonAction)) {
-                    action = new ClawAutonAction(this);
-                    manager.redrawContent();
-                }
-                break;
-            default:
-                action = new DriveAutonAction(this);
+        if (action.getClass() != ActionType.getClass(type)) {
+            action = ActionType.getInstance(type, this);
+            manager.redrawContent();
         }
         resetSubtitleText();
         manager.getFrame().repaint();
