@@ -6,9 +6,9 @@ import info.cameronlund.autonplanner.zones.ScoringZone;
 import java.awt.*;
 
 public class Robot {
-    private double rotation = -45;
-    private int restingX = 545;
-    private int restingY = 545;
+    private double rotation = 45;
+    private int restingX = 155;
+    private int restingY = 530;
     private int restingRotation = 0;
     private double posX = restingX;
     private double posY = restingY;
@@ -81,7 +81,7 @@ public class Robot {
         g2.fill(posMarkerL);
         g2.fill(posMarkerR);
         inventory.paint(null, g);
-        g2.rotate(Math.toRadians(-1 * getRotation()), posX, posY); // Rotate on the robots center
+        g2.rotate(Math.toRadians(-1 * (getRotation())), posX, posY); // Rotate on the robots center
     }
 
     public int getRestingRotation() {

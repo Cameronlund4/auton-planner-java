@@ -292,6 +292,12 @@ public class ActionManager {
                 case "WAIT":
                     wrapper.setType("Wait");
                     break;
+                case "POINT":
+                    wrapper.setType("Point");
+                    break;
+                case "MOGO":
+                    wrapper.setType("Mogo");
+                    break;
             }
             // Load the data for the action
             wrapper.getAction().loadJson(object);

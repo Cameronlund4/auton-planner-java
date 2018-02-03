@@ -85,13 +85,13 @@ public class FieldPositionHelper {
         // Game loads
         // Game loader: 675, 285
         for (int i = 1; i < 13; i++) {
-            cones[i].setRestingReturn(675, 285);
+            cones[i].setRestingReturn(11, 285);
             cones[i].setOnField(false);
         }
         cones[1].setOnField(true); // One cone on the loader
 
         // Pre load
-        cones[0].setRestingReturn(535, 535); // Pre load, put in mid of the cone
+        cones[0].setRestingReturn(152, 535); // Pre load, put in mid of the cone
 
         // Okay, let's make our lives easy
         // Cones are always spaced in increments of 60
@@ -152,19 +152,32 @@ public class FieldPositionHelper {
             for (int skip : skips) // If we don't want to draw at this loc, continue
                 if (i == skip)
                     continue drawLoop;
-            cones[startCone++].setRestingReturn(startX + (i * multiplier), y);
+            int newX = y;
+            int newY = (int) Math.round(343.5 - ((startX + (i * multiplier))));
+            cones[startCone++].setRestingReturn(newX, (int) (newY + 343.5));
         }
     }
 
     public static void setMogoPositions(MobileGoal[] mogos) {
-        mogos[0].setRestingReturn(230, 345);
-        mogos[1].setRestingReturn(345, 230);
-        mogos[2].setRestingReturn(171, 622);
-        mogos[3].setRestingReturn(622, 171);
+        mogos[1].setRestingReturn(230, 345); //
+        mogos[4].setRestingReturn(345, 230); //
+        mogos[3].setRestingReturn(171, (687-622));
+        mogos[2].setRestingReturn(622, (687/2-171)+(687/2));
 
-        mogos[4].setRestingReturn(457, 342);
-        mogos[5].setRestingReturn(342, 457);
-        mogos[6].setRestingReturn(512, 62);
-        mogos[7].setRestingReturn(62, 512);
+        mogos[5].setRestingReturn(457, 342); //
+        mogos[0].setRestingReturn(342, 457); //
+        mogos[7].setRestingReturn(512, (687/2-62)+(687/2));
+        mogos[6].setRestingReturn(62, (687-512));
+
+//        mogos[4].setRestingReturn(230, 345);
+//        mogos[5].setRestingReturn(345, 230);
+//        mogos[6].setRestingReturn(171, 622);
+//        mogos[7].setRestingReturn(622, 171);
+//
+//        mogos[0].setRestingReturn(457, 342);
+//        mogos[1].setRestingReturn(342, 457);
+//        mogos[2].setRestingReturn(512, 62);
+//        mogos[3].setRestingReturn(62, 512);
+
     }
 }
