@@ -298,6 +298,9 @@ public class ActionManager {
                 case "MOGO":
                     wrapper.setType("Mogo");
                     break;
+                case "4BAR":
+                    wrapper.setType("Four Bar");
+                    break;
             }
             // Load the data for the action
             wrapper.getAction().loadJson(object);

@@ -43,6 +43,7 @@ public class AutonPlanner {
         ActionType.registerAction("Wait", WaitAutonAction.class);
         ActionType.registerAction("Point", OdomTargetAction.class);
         ActionType.registerAction("Mogo", MogoAutonAction.class);
+        ActionType.registerAction("Four Bar", FourBarAutonAction.class);
 
         // Main frame for the project
         JFrame frame = new JFrame("[2616E] Auton Planner");

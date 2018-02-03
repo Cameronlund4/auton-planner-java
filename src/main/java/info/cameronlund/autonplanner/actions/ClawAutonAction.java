@@ -1,38 +1,23 @@
 package info.cameronlund.autonplanner.actions;
 
+
 import com.google.gson.JsonObject;
-import info.cameronlund.autonplanner.listeners.ActionFocusListener;
 import info.cameronlund.autonplanner.robot.Robot;
 
 import javax.swing.*;
-import javax.swing.border.MatteBorder;
 import java.awt.*;
 import java.awt.event.ActionListener;
 
-/**
- * Name: Cameron Lund
- * Date: 1/27/2017
- * JDK: 1.8.0_101
- * Project: x
- */
 public class ClawAutonAction extends AutonAction {
-    private float angleTarget = 0f;
-    private int speed;
-    private int millis;
+    private JTextField angleField;
     private String action = "action1";
+    private JRadioButton openClaw;
+    private JRadioButton closeClaw;
     private ActionListener listener;
-
-    // GUI Objects
-    private JTextField millisField;
-    private JTextField speedField;
-    private JRadioButton setButton;
-    private JRadioButton closeButton;
-    private JTextField targetField;
 
     public ClawAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
-
-        setColor(Color.RED);
+        setColor(Color.BLUE);
         JPanel content = new JPanel();
         content.setLayout(new GridBagLayout());
         GridBagConstraints gbc = new GridBagConstraints();
@@ -41,124 +26,29 @@ public class ClawAutonAction extends AutonAction {
         //gbc.weightx = 1;
         //gbc.fill = GridBagConstraints.NONE;
 
-        ButtonGroup group = new ButtonGroup();
-
-        // Target set
-        JLabel targetLabel = new JLabel("       \u2022 Target: ");
-        gbc.gridx = 0;
-        gbc.gridy = 2;
-        content.add(targetLabel, gbc);
-
-        JLabel speedLabel = new JLabel("\u2022 Speed: ");
+        JLabel typeLabel = new JLabel("\u2022 Type: ");
         gbc.gridx = 0;
         gbc.gridy = 0;
-        content.add(speedLabel, gbc);
-
-        JLabel millisLabel = new JLabel("       \u2022 Millis: ");
-        gbc.gridx = 0;
-        gbc.gridy = 4;
-        content.add(millisLabel, gbc);
-
-        speedField = new JTextField();
-        speedField.setText(speed + "");
-        speedField.setBorder(BorderFactory.createCompoundBorder(
-                new MatteBorder(1, 1, 1, 1, Color.GRAY),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        speedField.setPreferredSize(new Dimension(75, 25));
-        speedField.setMaximumSize(new Dimension(75, 25));
-        speedField.addActionListener(e -> {
-            try {
-                speed = Integer.parseInt(speedField.getText());
-                wrapper.getManager().repaint();
-            } catch (NumberFormatException ignored) {
-                ignored.printStackTrace();
-                speedField.setText(speed + "");
-            }
-        });
-        speedField.addFocusListener(new ActionFocusListener(speedField));
-        getSaveStateListener().addComponent(speedField);
-        gbc.gridx = 1;
-        gbc.gridy = 0;
-        gbc.fill = GridBagConstraints.BOTH;
-        content.add(speedField, gbc);
-
-        targetField = new JTextField();
-        targetField.setText((int) angleTarget + "");
-        targetField.setBorder(BorderFactory.createCompoundBorder(
-                new MatteBorder(1, 1, 1, 1, Color.GRAY),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        targetField.setPreferredSize(new Dimension(75, 25));
-        targetField.setMaximumSize(new Dimension(75, 25));
-        targetField.addActionListener(e -> {
-            try {
-                angleTarget = Integer.parseInt(targetField.getText());
-                wrapper.getManager().repaint();
-            } catch (NumberFormatException ignored) {
-                ignored.printStackTrace();
-                targetField.setText((int) angleTarget + "");
-            }
-        });
-        targetField.addFocusListener(new ActionFocusListener(targetField));
-        getSaveStateListener().addComponent(targetField);
-        gbc.gridx = 1;
-        gbc.gridy = 2;
-        gbc.fill = GridBagConstraints.BOTH;
-        content.add(targetField, gbc);
-
-        millisField = new JTextField();
-        millisField.setEnabled(false);
-        millisField.setText(millis + "");
-        millisField.setBorder(BorderFactory.createCompoundBorder(
-                new MatteBorder(1, 1, 1, 1, Color.GRAY),
-                BorderFactory.createEmptyBorder(5, 5, 5, 5)));
-        millisField.setPreferredSize(new Dimension(75, 25));
-        millisField.setMaximumSize(new Dimension(75, 25));
-        millisField.addActionListener(e -> {
-            try {
-                millis = Integer.parseInt(millisField.getText());
-                wrapper.getManager().repaint();
-            } catch (NumberFormatException ignored) {
-                ignored.printStackTrace();
-                millisField.setText(millis + "");
-            }
-        });
-        millisField.addFocusListener(new ActionFocusListener(millisField));
-        getSaveStateListener().addComponent(millisField);
-        gbc.gridx = 1;
-        gbc.gridy = 4;
-        gbc.fill = GridBagConstraints.BOTH;
-        content.add(millisField, gbc);
+        content.add(typeLabel, gbc);
 
         listener = e -> {
             action = e.getActionCommand();
-            switch (action) {
-                case "action1":
-                    millisField.setEnabled(false);
-                    targetField.setEnabled(true);
-                    break;
-                case "action2":
-                    millisField.setEnabled(true);
-                    targetField.setEnabled(false);
-                    break;
-            }
             wrapper.getManager().repaint();
         };
+        ButtonGroup group = new ButtonGroup();
 
-        // Target set
-        gbc.insets = new Insets(5, 5, 5, 5);
-        setButton = createRadioButton("Set claw", "action1");
-        setButton.setSelected(true);
+        openClaw = createRadioButton("Open Claw", "action1");
+        openClaw.setSelected(true);
+        group.add(openClaw);
         gbc.gridx = 0;
         gbc.gridy = 1;
-        content.add(setButton, gbc);
-        group.add(setButton);
+        content.add(openClaw, gbc);
 
-        // Close set
-        closeButton = createRadioButton("Close claw", "action2");
+        closeClaw = createRadioButton("Close Claw", "action2");
+        group.add(closeClaw);
         gbc.gridx = 0;
-        gbc.gridy = 3;
-        content.add(closeButton, gbc);
-        group.add(closeButton);
+        gbc.gridy = 2;
+        content.add(closeClaw, gbc);
 
         setContent(content);
     }
@@ -173,11 +63,7 @@ public class ClawAutonAction extends AutonAction {
 
     @Override
     public Robot renderWithGraphics(Robot robot, Graphics g) {
-        g.setColor(getColor());
-        Graphics2D g2 = (Graphics2D) g;
-        g2.setFont(new Font("default", Font.BOLD, 14));
-        g2.drawString("C", (int) robot.getPosX() - 6, (int) robot.getPosY() + 5);
-        return renderWithoutGraphics(robot);
+        return robot;
     }
 
     @Override
@@ -186,14 +72,18 @@ public class ClawAutonAction extends AutonAction {
     }
 
     @Override
-    public String renderCode(info.cameronlund.autonplanner.robot.Robot robot) {
+    public String renderCode(Robot robot) {
+        // ((sqrt((driveWidthHoles*0.5)^2 + (driveHeightHoles*0.5)^2)*pi)/((wheelSize)pi))*360
+
+        // Total drive ticks/point turn rotation: ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))*360
+        // Ticks/degree point turn rotation ((sqrt((30*0.5)^2 + (28*0.5)^2)*pi)/(4pi))
         switch (action) {
-            case "action1":
-                return String.format("setClaw(%d,%d); // " + getWrapper().getActionName(), (int) angleTarget, speed);
             case "action2":
-                return String.format("clawClose(%d,%d); // " + getWrapper().getActionName(), millis, speed);
+                return String.format("closeClaw(); // " + getWrapper().getActionName() + "\nwaitForClaw();");
+            case "action1":
+                return String.format("openClaw(); // " + getWrapper().getActionName() + "\nwaitForClaw();");
             default:
-                return "// !----- Failed to generate claw code here -----!";
+                return "// !----- Failed to generate turn code here -----!";
         }
     }
 
@@ -204,21 +94,15 @@ public class ClawAutonAction extends AutonAction {
                     object.get("type").getAsString());
             return;
         }
-        millis = object.get("millis").getAsInt();
-        millisField.setText(millis + "");
         action = object.get("action").getAsString();
         switch (action) {
             case "action1":
-                setButton.setSelected(true);
+                openClaw.setSelected(true);
                 break;
             case "action2":
-                closeButton.setSelected(true);
+                closeClaw.setSelected(true);
                 break;
         }
-        speed = object.get("speed").getAsInt();
-        speedField.setText(speed + "");
-        angleTarget = object.get("angleTarget").getAsInt();
-        targetField.setText((int) angleTarget + "");
     }
 
     @Override
@@ -226,9 +110,6 @@ public class ClawAutonAction extends AutonAction {
         JsonObject object = new JsonObject();
         object.addProperty("type", "CLAW");
         object.addProperty("name", getWrapper().getActionName());
-        object.addProperty("angleTarget", (int) angleTarget);
-        object.addProperty("speed", speed);
-        object.addProperty("millis", millis);
         object.addProperty("action", action);
         return object;
     }

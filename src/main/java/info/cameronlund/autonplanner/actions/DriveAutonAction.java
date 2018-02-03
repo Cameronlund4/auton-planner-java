@@ -80,7 +80,7 @@ public class DriveAutonAction extends AutonAction {
 
     @Override
     public String renderCode(info.cameronlund.autonplanner.robot.Robot robot) {
-        return String.format("pidDriveStraight(%d); // " + getWrapper().getActionName(), distance);
+        return String.format("odomDriveForward(%d, false, true); // " + getWrapper().getActionName(), distance);
     }
 
     @Override

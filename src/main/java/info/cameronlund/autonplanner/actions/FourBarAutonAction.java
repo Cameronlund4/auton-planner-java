@@ -14,11 +14,11 @@ import java.awt.*;
  * JDK: 1.8.0_101
  * Project: x
  */
-public class LiftAutonAction extends AutonAction {
+public class FourBarAutonAction extends AutonAction {
     private float angleTarget;
     private JTextField angleField;
 
-    public LiftAutonAction(AutonActionWrapper wrapper) {
+    public FourBarAutonAction(AutonActionWrapper wrapper) {
         super(wrapper);
         setColor(Color.YELLOW);
         JPanel content = new JPanel();
@@ -75,14 +75,14 @@ public class LiftAutonAction extends AutonAction {
     }
 
     @Override
-    public String renderCode(info.cameronlund.autonplanner.robot.Robot robot) {
-        return String.format("setLiftTarget(%d); // " + getWrapper().getActionName() + "\n waitForLift();", (int) angleTarget);
+    public String renderCode(Robot robot) {
+        return String.format("setIntakeTarget(%d); // " + getWrapper().getActionName() + "\nwaitForIntake();", (int) angleTarget);
     }
 
     @Override
     public void loadJson(JsonObject object) {
-        if (!object.get("type").getAsString().equalsIgnoreCase("LIFT")) {
-            System.out.println("Got bad type for " + "LIFT" + ", received " +
+        if (!object.get("type").getAsString().equalsIgnoreCase("4BAR")) {
+            System.out.println("Got bad type for " + "4BAR" + ", received " +
                     object.get("type").getAsString());
             return;
         }
@@ -93,7 +93,7 @@ public class LiftAutonAction extends AutonAction {
     @Override
     public JsonObject toJson() {
         JsonObject object = new JsonObject();
-        object.addProperty("type", "LIFT");
+        object.addProperty("type", "4BAR");
         object.addProperty("name", getWrapper().getActionName());
         object.addProperty("angleTarget", angleTarget);
         return object;
