@@ -45,6 +45,7 @@ public class Robot {
     }
 
     public void addRotation(double rotation) {
+        // System.out.println(this.rotation);
         setRotation(this.rotation + rotation);
     }
 

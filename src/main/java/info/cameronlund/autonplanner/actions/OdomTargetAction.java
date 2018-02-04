@@ -116,7 +116,7 @@ public class OdomTargetAction extends AutonAction {
         int yOld = (int) robot.getPosY();
         robot.setPosition(x,y);
         double robotRot = Math.toRadians(robot.getRotation());
-        System.out.println("Robot rot: " + robotRot + "," + Math.toDegrees(robotRot));
+        // System.out.println("Robot rot: " + robotRot + "," + Math.toDegrees(robotRot));
         double lineRot = Math.atan((double) (yOld - y) / (double) (xOld - x)) + (Math.PI / 2);
         if (xOld > x)
             lineRot += Math.PI;

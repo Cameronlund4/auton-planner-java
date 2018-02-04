@@ -124,10 +124,9 @@ public class TurnAutonAction extends AutonAction {
         switch (action) {
             // TODO lol wtf is that multiplier
             case "action2":
-                return String.format("pidDrivePoint(%d * sideMult); // " + getWrapper().getActionName(), (int) (angleDelta * 5.21566151f));
+                return String.format("pLoopTurnPoint(%d); // " + getWrapper().getActionName(), Math.round(angleDelta));
             case "action1":
-                return String.format("turnToAngle(%d * sideMult, %d * sideMult); // " + getWrapper().getActionName(),
-                        ((int) (robot.getRotation() - AutonPlanner.getStartingRotation()) * -10), 0); // TODO Implement gyro turn
+                return String.format("odomTurnSB(%d); // " + getWrapper().getActionName(), Math.round(angleDelta));
             default:
                 return "// !----- Failed to generate turn code here -----!";
         }

@@ -44,6 +44,7 @@ public class AutonPlanner {
         ActionType.registerAction("Point", OdomTargetAction.class);
         ActionType.registerAction("Mogo", MogoAutonAction.class);
         ActionType.registerAction("Four Bar", FourBarAutonAction.class);
+        ActionType.registerAction("Custom", CustomAutonAction.class);
 
         // Main frame for the project
         JFrame frame = new JFrame("[2616E] Auton Planner");
@@ -137,12 +138,14 @@ public class AutonPlanner {
             try {
                 int rotation = Integer.parseInt(angleField.getText());
                 setStartingRotation(rotation);
+                equippedPanel.getRobot().setRestingRotation(rotation);
                 frame.repaint();
             } catch (NumberFormatException ignored) {
                 angleField.setText(((int) equippedPanel.getRobot().getRotation()) + "");
             }
         });
         angleField.setText(((int) equippedPanel.getRobot().getRotation()) + "");
+        equippedPanel.getRobot().setRestingRotation(((int) equippedPanel.getRobot().getRotation()));
         gbc.gridx = 0;
         gbc.gridy = 0;
         startingAngleWrapper.add(angleLabel, gbc);

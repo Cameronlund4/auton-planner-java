@@ -301,6 +301,9 @@ public class ActionManager {
                 case "4BAR":
                     wrapper.setType("Four Bar");
                     break;
+                case "CUSTOM":
+                    wrapper.setType("Custom");
+                    break;
             }
             // Load the data for the action
             wrapper.getAction().loadJson(object);
